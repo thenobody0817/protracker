@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=0" />
-    <title>Pro Tracker: Elite Partner v6.7</title>
+    <title>Pro Tracker: Elite Partner v7.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
@@ -39,7 +39,6 @@
         .exercise-title { font-size: 15px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.2; text-align: center; }
         .icon-tile { width: 44px; height: 44px; border-radius: 14px; background: var(--bg-soft); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; border: 1px solid var(--border); }
         .chip { border: 1px solid var(--border); background: var(--bg-soft); border-radius: 999px; padding: 6px 14px; font-size: 10px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); cursor: pointer; }
-        
         .set-dot { width: 50px; height: 50px; border-radius: 14px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; transition: all 0.15s ease; background: var(--bg-soft); color: var(--muted); cursor: pointer; }
         .set-dot.checked { background: var(--accent-2); color: white; border-color: transparent; transform: scale(1.05); }
         
@@ -47,7 +46,7 @@
         .is-collapsed .collapsible-content { max-height: 0; opacity: 0; pointer-events: none; margin-top: 0; }
         .is-collapsed { padding-bottom: 20px !important; }
 
-        .nav-btn { flex: 1; padding: 12px 0; font-size: 10px; font-weight: 900; border-radius: 14px; transition: all 0.3s ease; color: var(--muted); opacity: 0.5; text-transform: uppercase; cursor: pointer; }
+        .nav-btn { flex: 1; padding: 12px 0; font-size: 10px; font-weight: 900; border-radius: 14px; transition: all 0.3s ease; color: var(--muted); opacity: 0.5; text-transform: uppercase; cursor: pointer; text-align: center; }
         .nav-btn.active { color: white; opacity: 1; background: var(--accent); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         
         .footer { position: fixed; bottom: 0; left: 0; right: 0; padding: 20px; background: var(--glass-bg); border-top: 1px solid var(--border); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 400; }
@@ -56,17 +55,14 @@
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(15px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-card { background: var(--bg-card); border-radius: 32px; padding: 32px; width: 100%; max-width: 480px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; box-shadow: 0 40px 80px rgba(0,0,0,0.3); }
         
-        .tune-btn { width: 52px; height: 52px; border-radius: 16px; background: var(--bg-soft); border: 1px solid var(--border); font-weight: 900; font-size: 22px; color: var(--text); display: flex; align-items: center; justify-content: center; }
-        .load-strip { border-radius: 20px; border: 1px solid var(--border); background: var(--bg-soft); padding: 12px; width: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        
         #focus-overlay { position: fixed; inset: 0; background: var(--bg-app); z-index: 500; display: none; flex-direction: column; padding-bottom: 140px; overflow-y: auto; }
-        .micro { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+        .focus-weight-display { font-size: 80px; font-weight: 900; letter-spacing: -0.05em; line-height: 1; color: var(--accent); }
         .cue-box { border-left: 3px solid var(--accent); padding-left: 12px; margin-bottom: 16px; }
         .avoid-box { border-left: 3px solid var(--error); padding-left: 12px; background: rgba(239, 68, 68, 0.05); padding: 8px 12px; border-radius: 0 8px 8px 0; }
-        .focus-weight-display { font-size: 80px; font-weight: 900; letter-spacing: -0.05em; line-height: 1; color: var(--accent); }
         
         #matrix-bg { display: none; position: fixed; inset: 0; z-index: -1; opacity: 0.5; }
         html[data-theme="cyber"] #matrix-bg { display: block; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body>
@@ -77,7 +73,7 @@
             <button onclick="window.app.closeFocus()" class="w-12 h-12 rounded-2xl bg-card border border-base flex items-center justify-center btn-press shadow-sm text-accent">
                 <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" /></svg>
             </button>
-            <p class="micro opacity-40 uppercase tracking-widest font-black">Performance Focus</p>
+            <p class="text-[9px] font-black uppercase tracking-widest opacity-40">Protocol Focus</p>
             <div class="w-12"></div>
         </div>
         <div id="focus-content" class="px-6 flex-1"></div>
@@ -91,7 +87,7 @@
         <header class="flex justify-between items-center mb-8">
             <div class="min-w-0">
                 <h1 class="text-3xl font-black italic uppercase text-blue-600 tracking-tighter leading-none">Pro Track</h1>
-                <p class="micro mt-1 opacity-50 font-black">Elite Hub v6.7</p>
+                <p class="text-[9px] font-black uppercase mt-1 opacity-50">Titan Hub v7.0</p>
             </div>
             <div class="flex gap-2">
                 <button onclick="window.app.showThemeSelector()" class="bg-card border border-base px-3 py-2 rounded-2xl text-[10px] font-black uppercase btn-press">Theme</button>
@@ -102,7 +98,7 @@
         <section class="card mb-8">
             <div class="flex justify-between items-end mb-4">
                 <div class="text-left">
-                    <p class="micro opacity-40 mb-1">Spatial Progress</p>
+                    <p class="text-[9px] font-black uppercase tracking-widest opacity-40 mb-1">Spatial Persistence</p>
                     <h2 id="progress-percent" class="text-4xl font-black tracking-tighter leading-none">0%</h2>
                 </div>
                 <span class="chip cursor-default font-black"><span id="sets-done">0</span> / <span id="sets-total">0</span> Sets</span>
@@ -127,10 +123,10 @@
         <div id="footer-progress-bg"></div>
         <div class="max-w-md mx-auto flex items-center justify-between gap-6">
             <button onclick="window.app.enterFocus()" class="w-12 h-12 rounded-2xl bg-card border border-base flex items-center justify-center btn-press shrink-0 shadow-sm text-emerald-500">
-                <svg width="22" height="22" fill="currentColor" viewBox="0 0 16 16"><path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5M.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5m15 0.5a.5.5 0 0 1 .5-.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5z" /></svg>
+                <svg width="22" height="22" fill="currentColor" viewBox="0 0 16 16"><path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5M.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 14.5v-4a.5.5 0 0 1 .5-.5m15 0.5a.5.5 0 0 1 .5-.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5z" /></svg>
             </button>
             <div class="flex-1 min-w-0">
-                <p id="coach-name" class="text-xs font-black uppercase truncate text-main">Syncing...</p>
+                <p id="coach-name" class="text-xs font-black uppercase truncate text-main">Syncing Protocol...</p>
                 <div class="flex items-center gap-3 mt-1">
                     <span id="coach-load" class="text-[10px] font-black text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded leading-none">--</span>
                     <span id="coach-reps" class="text-[10px] font-bold text-slate-400 leading-none">--</span>
@@ -142,53 +138,51 @@
     </footer>
 
     <script>
-        // --- DATA ---
+        // --- DATA ARCHITECTURE ---
         const WORKOUTS = {
             A: [
-                { name: "Seated Machine Shoulder Press", type: "shoulder", reps: "5–7", setsTarget: 3, setsMax: 3, load: "45 kg", rest: 120, q: "seated+machine+shoulder+press+form", mech: "stack", bar: 0, cues: ["Drive elbows high.", "Stay vertical."], avoid: ["Lower back arch."] },
+                { name: "Seated Machine Shoulder Press", type: "shoulder", reps: "5–7", setsTarget: 3, setsMax: 3, load: "45 kg", rest: 120, q: "seated+machine+shoulder+press+form", mech: "stack", cues: ["Drive elbows high.", "Stay vertical."], avoid: ["Lower back arch."] },
                 { name: "Smith Flat Press", type: "push", reps: "6–8", setsTarget: 4, setsMax: 4, load: "48 kg", rest: 120, q: "smith+machine+bench+press+form", hot: true, mech: "plates", bar: 8, cues: ["Unrack safely.", "Expand chest."], avoid: ["Flare elbows."] },
-                { name: "Seated Cable Row (neutral, 2s pause)", type: "pull", reps: "6–8", setsTarget: 4, setsMax: 4, load: "55 kg", rest: 120, q: "seated+cable+row+neutral+grip+form", mech: "stack", bar: 0, cues: ["2s peak squeeze.", "Deep stretch."], avoid: ["Torso swing."] },
-                { name: "Cable Serratus Punch", type: "shoulder", reps: "12–15", setsTarget: 2, setsMax: 2, load: "7.5 kg", rest: 45, q: "cable+serratus+punch+form", mech: "stack", bar: 0, cues: ["Arm straight.", "Push blade forward."], avoid: ["Elbow bend."] },
-                { name: "Lateral Delt Machine", type: "shoulder", reps: "12–15", setsTarget: 3, setsMax: 3, load: "17.5 kg", rest: 90, q: "lateral+delt+machine+form", mech: "stack", bar: 0, cues: ["Lead elbows.", "Pause at top."], avoid: ["Shrug dominance."] },
-                { name: "Overhead Cable Triceps Extension", type: "arms", reps: "8–10", setsTarget: 3, setsMax: 3, load: "12.5 kg", rest: 90, q: "overhead+cable+triceps+extension+form", mech: "stack", bar: 0, cues: ["Long head stretch.", "Stable elbow."], avoid: ["Lockout flare."] },
-                { name: "Incline Dumbbell Curl", type: "arms", reps: "8–10", setsTarget: 3, setsMax: 3, load: "12 kg", rest: 75, q: "incline+dumbbell+curls+form", mech: "db", bar: 0, cues: ["Full stretch.", "No swing."], avoid: ["Shoulder roll."] }
+                { name: "Seated Cable Row (neutral, 2s pause)", type: "pull", reps: "6–8", setsTarget: 4, setsMax: 4, load: "55 kg", rest: 120, q: "seated+cable+row+neutral+grip+form", mech: "stack", cues: ["2s peak squeeze.", "Deep stretch."], avoid: ["Torso swing."] },
+                { name: "Cable Serratus Punch", type: "shoulder", reps: "12–15", setsTarget: 2, setsMax: 2, load: "7.5 kg", rest: 45, q: "cable+serratus+punch+form", mech: "stack", cues: ["Arm straight.", "Push blade forward."], avoid: ["Elbow bend."] },
+                { name: "Lateral Delt Machine", type: "shoulder", reps: "12–15", setsTarget: 3, setsMax: 3, load: "17.5 kg", rest: 90, q: "lateral+delt+machine+form", mech: "stack", cues: ["Lead elbows.", "Pause at top."], avoid: ["Shrug dominance."] },
+                { name: "Overhead Cable Triceps Extension", type: "arms", reps: "8–10", setsTarget: 3, setsMax: 3, load: "12.5 kg", rest: 90, q: "overhead+cable+triceps+extension+form", mech: "stack", cues: ["Long head stretch.", "Stable elbow."], avoid: ["Lockout flare."] },
+                { name: "Incline Dumbbell Curl", type: "arms", reps: "8–10", setsTarget: 3, setsMax: 3, load: "12 kg", rest: 75, q: "incline+dumbbell+curls+form", mech: "db", cues: ["Full stretch.", "No swing."], avoid: ["Shoulder roll."] }
             ],
             X: [
-                { name: "Supine full-body reach", type: "core", reps: "30 s", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 30, q: "supine+full+body+reach+stretch", cues: ["Arms overhead", "Heels long", "Actively lengthen"], avoid: ["Aggressive strain"] },
-                { name: "Child’s pose long reach", type: "core", reps: "45–60 s", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 30, q: "child+pose+reach+back+breath", cues: ["Hips back", "Ribs down", "Breathe into back"], avoid: ["Aggressive stretching"] },
-                { name: "90/90 floor traction", type: "core", reps: "30–45 s", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 30, q: "90+90+floor+traction+recovery", cues: ["Knees to chest", "Spine relaxed"], avoid: ["Forcing knees"] },
-                { name: "Slow nasal breathing", type: "core", reps: "2 min", setsTarget: 1, setsMax: 1, load: "0 kg", rest: 60, q: "nasal+breathing+downregulation", cues: ["In through nose", "Long slow exhale"], avoid: ["Mouth breathing"] },
-                { name: "Dead bug", type: "core", reps: "6–10 slow", setsTarget: 3, setsMax: 3, load: "0 kg", rest: 60, q: "dead+bug+proper+form", cues: ["Lower back glued to floor", "Stop before shaking"], avoid: ["Lower back arch"] },
-                { name: "Hollow body hold", type: "core", reps: "20–40 s", setsTarget: 3, setsMax: 3, load: "0 kg", rest: 60, q: "hollow+body+hold+form", cues: ["Low ribs down", "End set early"], avoid: ["Lumbar arching"] },
-                { name: "Side plank", type: "core", reps: "20–45 s", setsTarget: 3, setsMax: 3, load: "0 kg", rest: 60, q: "side+plank+form", cues: ["Hips stacked", "Neck neutral"], avoid: ["Hips dropping"] }
+                { name: "Supine full-body reach", type: "stretch", icon: "📏", reps: "30 s", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 30, q: "supine+full+body+reach+stretch", cues: ["Arms overhead", "Heels long", "Actively lengthen"], avoid: ["Aggressive strain"] },
+                { name: "Child’s pose long reach", type: "stretch", icon: "🧘", reps: "45–60 s", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 30, q: "child+pose+reach+back+breath", cues: ["Hips back", "Ribs down", "Breathe into back"], avoid: ["Aggressive stretching"] },
+                { name: "90/90 floor traction", type: "stretch", icon: "🛋️", reps: "30–45 s", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 30, q: "90+90+floor+traction+recovery", cues: ["Knees to chest", "Spine relaxed"], avoid: ["Forcing knees"] },
+                { name: "Slow nasal breathing", type: "breath", icon: "🌬️", reps: "2 min", setsTarget: 1, setsMax: 1, load: "0 kg", rest: 60, q: "nasal+breathing+downregulation", cues: ["In through nose", "Long slow exhale"], avoid: ["Mouth breathing"] },
+                { name: "Dead bug", type: "core", icon: "🐞", reps: "6–10 slow", setsTarget: 3, setsMax: 3, load: "0 kg", rest: 60, q: "dead+bug+proper+form", cues: ["Lower back glued to floor", "Stop before shaking"], avoid: ["Lower back arch"] },
+                { name: "Hollow body hold", type: "core", icon: "🛶", reps: "20–40 s", setsTarget: 3, setsMax: 3, load: "0 kg", rest: 60, q: "hollow+body+hold+form", cues: ["Low ribs down", "End set early"], avoid: ["Lumbar arching"] },
+                { name: "Side plank", type: "core", icon: "🧱", reps: "20–45 s", setsTarget: 3, setsMax: 3, load: "0 kg", rest: 60, q: "side+plank+form", cues: ["Hips stacked", "Neck neutral"], avoid: ["Hips dropping"] }
             ],
             B: [
                 { name: "Neutral-Grip Lat Pulldown", type: "pull", reps: "4–6", setsTarget: 4, setsMax: 4, load: "50 kg", rest: 120, q: "neutral+grip+lat+pulldown+form", mech: "stack", bar: 0, cues: ["Elbows to pockets.", "Vertical pull."], avoid: ["Biceps dominance."] },
                 { name: "High-Incline Machine Press", type: "push", reps: "3–6", setsTarget: 3, setsMax: 3, load: "45 kg", rest: 120, q: "high+incline+machine+press+form", mech: "plates", bar: 8, cues: ["Upper pec focus.", "Stable feet."], avoid: ["Excessive arch."] },
-                { name: "Straight-Arm Cable Pulldown", type: "pull", reps: "10–12", setsTarget: 2, setsMax: 2, load: "25 kg", rest: 90, q: "straight+arm+lat+pulldown+form", mech: "stack", bar: 0, cues: ["Overhead arc.", "Wide lats focus."], avoid: ["Tricep push."] },
+                { name: "Straight-Arm Cable Pulldown", type: "pull", reps: "10–12", setsTarget: 2, setsMax: 2, load: "25 kg", rest: 90, q: "straight+arm+lat+pulldown+form", mech: "stack", cues: ["Overhead arc.", "Wide lats focus."], avoid: ["Tricep push."] },
                 { name: "Prone Y-Raise / Trap-3", type: "shoulder", reps: "12–15", setsTarget: 2, setsMax: 2, load: "1 kg", rest: 60, q: "prone+trap+3+raise+form", mech: "db", cues: ["Thumbs up.", "Neutral head."], avoid: ["Momentum."] },
                 { name: "Chest-Supported Row (bilateral)", type: "pull", reps: "8–10", setsTarget: 3, setsMax: 3, load: "45 kg", rest: 90, q: "chest+supported+row+form", mech: "plates", bar: 8, cues: ["Heavy intent.", "Squeeze blades."], avoid: ["Torso lift."] },
-                { name: "Cable Lateral Raise", type: "shoulder", reps: "12–15", setsTarget: 3, setsMax: 3, load: "7.5 kg", rest: 60, q: "cable+lateral+raise+form", mech: "stack", bar: 0, cues: ["Across body.", "Constant tension."], avoid: ["Shrug dominance."] },
-                { name: "Rope Triceps Pushdown", type: "arms", reps: "10–12", setsTarget: 3, setsMax: 3, load: "25 kg", rest: 60, q: "rope+tricep+pushdowns+form", mech: "stack", bar: 0, cues: ["Flare ends.", "Lockout peak."], avoid: ["Rolling shoulders."] },
+                { name: "Cable Lateral Raise", type: "shoulder", reps: "12–15", setsTarget: 3, setsMax: 3, load: "7.5 kg", rest: 60, q: "cable+lateral+raise+form", mech: "stack", cues: ["Across body.", "Constant tension."], avoid: ["Shrug dominance."] },
+                { name: "Rope Triceps Pushdown", type: "arms", reps: "10–12", setsTarget: 3, setsMax: 3, load: "25 kg", rest: 60, q: "rope+tricep+pushdowns+form", mech: "stack", cues: ["Flare ends.", "Lockout peak."], avoid: ["Rolling shoulders."] },
                 { name: "EZ-Bar Curl", type: "arms", reps: "8–10", setsTarget: 3, setsMax: 3, load: "30 kg", rest: 75, q: "ez+bar+curls+form", mech: "plates", bar: 8, cues: ["Pinned elbows.", "Control down."], avoid: ["Torso swing."] }
             ],
             Y: [
-                { name: "Wall slides", type: "shoulder", reps: "10", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 45, q: "wall+slides+shoulder+health", cues: ["Back/head/hips on wall", "Ribs down", "Slide up without shrugging"], avoid: ["Lower back arch"] },
-                { name: "Scapular push-ups", type: "pull", reps: "8–12", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 45, q: "scapular+pushup+form", cues: ["Arms straight", "Move blades only", "No elbow bend"], avoid: ["Hip sag"] },
-                { name: "Prone Y-hold", type: "shoulder", reps: "20–30 s", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 60, q: "prone+y+hold+isometric", cues: ["Thumbs up", "Neck neutral", "Stop if upper traps burn"], avoid: ["Upper trap dominance"] },
-                { name: "Shoulder CARs", type: "shoulder", reps: "3 slow per side", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 30, q: "shoulder+cars+movement", cues: ["Controlled", "Pain-free", "No speed/momentum"], avoid: ["Spine twisting"] },
-                { name: "Deep squat hold", type: "core", reps: "60–90 s", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 60, q: "deep+squat+hold+mobility", cues: ["Heels down", "Spine long", "Elbows gently push knees out"], avoid: ["Heels lifting"] },
-                { name: "Overhead reach + side bend", type: "core", reps: "20 s per side", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 30, q: "standing+reach+side+bend", cues: ["Reach long", "Don’t crank", "Breathe through ribs"], avoid: ["Forced bending"] }
+                { name: "Wall slides", type: "shoulder", icon: "🧱", reps: "10", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 45, q: "wall+slides+shoulder+health", cues: ["Back/head/hips on wall", "Ribs down", "Slide up without shrugging"], avoid: ["Lower back arch"] },
+                { name: "Scapular push-ups", type: "pull", icon: "👐", reps: "8–12", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 45, q: "scapular+pushup+form", cues: ["Arms straight", "Move blades only", "No elbow bend"], avoid: ["Hip sag"] },
+                { name: "Prone Y-hold", type: "shoulder", icon: "✈️", reps: "20–30 s", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 60, q: "prone+y+hold+isometric", cues: ["Thumbs up", "Neck neutral", "Stop if upper traps burn"], avoid: ["Upper trap dominance"] },
+                { name: "Shoulder CARs", type: "shoulder", icon: "🔄", reps: "3 slow", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 30, q: "shoulder+cars+movement", cues: ["Controlled", "Pain-free", "No speed/momentum"], avoid: ["Spine twisting"] },
+                { name: "Deep squat hold", type: "core", icon: "🧘", reps: "60–90 s", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 60, q: "deep+squat+hold+mobility", cues: ["Heels down", "Spine long", "Elbows push knees"], avoid: ["Heels lifting"] },
+                { name: "Overhead reach + side bend", type: "core", icon: "🏹", reps: "20 s per side", setsTarget: 2, setsMax: 2, load: "0 kg", rest: 30, q: "standing+reach+side+bend", cues: ["Reach long", "Don’t crank", "Breathe through ribs"], avoid: ["Forced bending"] }
             ],
             C: [
-                { name: "Machine Chest Press (4s eccentric)", type: "push", reps: "10–12", setsTarget: 3, setsMax: 3, load: "40 kg", rest: 90, q: "machine+chest+press+form", mech: "stack", bar: 0, cues: ["Slow control.", "Tension focus."], avoid: ["Bouncing."] },
-                { name: "Supinated / Neutral Pulldown", type: "pull", reps: "10–12", setsTarget: 3, setsMax: 3, load: "40 kg", rest: 90, q: "underhand+lat+pulldown+form", mech: "stack", bar: 0, cues: ["Lat pump.", "Deep stretch."], avoid: ["Torso twist."] },
-                { name: "SA Chest-Supported Cable Row", type: "pull", reps: "12–15", setsTarget: 3, setsMax: 3, load: "20 kg", rest: 45, q: "single+arm+cable+row+form", mech: "stack", bar: 0, cues: ["Arm by arm.", "Rotation control."], avoid: ["Leaning back."] },
-                { name: "Cable External Rotation", type: "shoulder", reps: "15–20", setsTarget: 2, setsMax: 2, load: "5 kg", rest: 45, q: "cable+external+rotation+form", mech: "stack", bar: 0, cues: ["Elbow pinned.", "Rotator focus."], avoid: ["Momentum."] },
-                { name: "Lateral Delt Machine", type: "shoulder", reps: "15–20", setsTarget: 2, setsMax: 2, load: "15 kg", rest: 60, q: "lateral+delt+machine+form", mech: "stack", bar: 0, cues: ["High rep pump."], avoid: ["Shrug."] },
-                { name: "Reverse Pec Deck", type: "shoulder", reps: "15–20", setsTarget: 3, setsMax: 3, load: "12.5 kg", rest: 60, q: "reverse+pec+deck+form", mech: "stack", bar: 0, cues: ["Rear delt isolation."], avoid: ["Momentum."] },
-                { name: "Rope Hammer Curl", type: "arms", reps: "12–15", setsTarget: 2, setsMax: 2, load: "20 kg", rest: 45, q: "rope+hammer+curls+form", mech: "stack", bar: 0, cues: ["Thumbs up."], avoid: ["Shoulder roll."] },
-                { name: "SA Overhead Cable Triceps", type: "arms", reps: "12–15", setsTarget: 2, setsMax: 2, load: "12.5 kg", rest: 45, q: "single+arm+overhead+cable+triceps+extension+form", mech: "stack", bar: 0, cues: ["Deep stretch."], avoid: ["Lock flare."] }
+                { name: "Machine Chest Press (4s eccentric)", type: "push", reps: "10–12", setsTarget: 3, setsMax: 3, load: "40 kg", rest: 90, q: "machine+chest+press+form", mech: "stack", cues: ["Slow control.", "Tension focus."], avoid: ["Bouncing."] },
+                { name: "SA Chest-Supported Cable Row", type: "pull", reps: "12–15", setsTarget: 3, setsMax: 3, load: "20 kg", rest: 45, q: "single+arm+cable+row+form", mech: "stack", cues: ["Arm by arm.", "Rotation control."], avoid: ["Leaning back."] },
+                { name: "Lateral Delt Machine", type: "shoulder", reps: "15–20", setsTarget: 2, setsMax: 2, load: "15 kg", rest: 60, q: "lateral+delt+machine+form", mech: "stack", cues: ["High rep pump."], avoid: ["Shrug."] },
+                { name: "Reverse Pec Deck", type: "shoulder", reps: "15–20", setsTarget: 3, setsMax: 3, load: "12.5 kg", rest: 60, q: "reverse+pec+deck+form", mech: "stack", cues: ["Rear delt focus."], avoid: ["Momentum."] },
+                { name: "Rope Hammer Curl", type: "arms", reps: "12–15", setsTarget: 2, setsMax: 2, load: "20 kg", rest: 45, q: "rope+hammer+curls+form", mech: "stack", cues: ["Thumbs up."], avoid: ["Shoulder roll."] },
+                { name: "SA Overhead Cable Triceps", type: "arms", reps: "12–15", setsTarget: 2, setsMax: 2, load: "12.5 kg", rest: 45, q: "single+arm+overhead+cable+triceps+extension+form", mech: "stack", cues: ["Deep stretch."], avoid: ["Lockout flare."] }
             ]
         };
 
@@ -204,7 +198,14 @@
 
         const $ = id => document.getElementById(id);
         const getVal = s => { if (!s) return 0; let m = s.toString().match(/(\d+(\.\d+)?)/); return m ? parseFloat(m[0]) : 0; };
-        const t2e = t => { switch(t){ case 'push': return '💪'; case 'pull': return '🛶'; case 'shoulder': return '🎯'; case 'arms': return '🔥'; case 'core': return '🏠'; default: return '⚡'; } };
+        
+        function t2e(type) {
+            switch(type){
+                case 'push': return '💪'; case 'pull': return '🛶'; case 'shoulder': return '🎯';
+                case 'arms': return '🔥'; case 'core': return '🏠'; case 'stretch': return '🧘';
+                case 'breath': return '🌬️'; default: return '⚡';
+            }
+        }
 
         function saveState() {
             localStorage.setItem('activeTab', state.tab);
@@ -215,7 +216,6 @@
 
         window.onscroll = () => { if(!state.isInitialLoad) localStorage.setItem('scrollPos', window.scrollY); };
 
-        // --- CORE ENGINE ---
         function render(jump = true) {
             document.documentElement.setAttribute('data-theme', state.theme);
             if(state.theme === 'cyber') startMatrix(); else stopMatrix();
@@ -224,8 +224,8 @@
             const list = $('main-list');
             list.innerHTML = '';
             
-            const sessionData = WORKOUTS[state.tab] || [];
-            sessionData.forEach((exercise, idx) => {
+            const session = WORKOUTS[state.tab] || [];
+            session.forEach((exercise, idx) => {
                 try {
                     const curLoad = localStorage.getItem(`load-${state.tab}-${idx}`) || exercise.load;
                     const lastLoad = localStorage.getItem(`last-${state.tab}-${idx}`) || "--";
@@ -250,13 +250,13 @@
                         dots += `<button onclick="window.app.handleSetToggle(${idx}, ${s})" class="set-dot ${checked ? 'checked' : 'unchecked'} ${s > goalNum ? 'optional' : ''}">${checked ? '✓' : (s > goalNum ? '+' : s)}</button>`;
                     }
 
-                    const cardNameForJs = exercise.name.replace(/'/g, "\\'");
+                    const cardIcon = exercise.icon ? exercise.icon : t2e(exercise.type);
                     const card = document.createElement('div');
                     card.id = `ex-card-${idx}`;
                     card.className = `card relative ${folded ? 'is-collapsed' : ''}`;
                     card.innerHTML = `
                         <div class="relative flex items-center justify-between cursor-pointer" onclick="window.app.toggleFold(${idx})">
-                            <div class="icon-tile shrink-0">${t2e(exercise.type)}</div>
+                            <div class="icon-tile shrink-0">${cardIcon}</div>
                             <div class="flex-1 text-center px-4"><h4 class="exercise-title">${exercise.name}</h4></div>
                             <div class="w-[44px]"></div>
                         </div>
@@ -276,7 +276,7 @@
                             </div>
                         </div>`;
                     list.appendChild(card);
-                } catch(e) { console.error("Prime Engine Error at index " + idx, e); }
+                } catch(e) { console.error("Titan Engine Logic Failure on index " + idx, e); }
             });
             updateStats(); updateFooter();
             if(state.focusIdx !== null) enterFocus(state.focusIdx);
@@ -285,7 +285,7 @@
             }
         }
 
-        // --- ACTIONS ---
+        // --- CORE ACTIONS ---
         function handleSetToggle(idx, sNum) {
             const key = `set-${state.tab}-${idx}-${sNum}`;
             if (!localStorage.getItem(key)) {
@@ -341,21 +341,21 @@
             $('modal-overlay').style.display = 'flex';
             $('modal-content').innerHTML = `
                 <div class="modal-body text-center">
-                    <p class="micro mb-8 opacity-40 uppercase tracking-widest font-black">Target Tuning</p>
+                    <p class="text-[9px] font-black uppercase tracking-widest opacity-40 mb-8">Target Tuning</p>
                     <div class="mb-10 text-left">
-                        <p class="micro text-blue-600 mb-4 font-black uppercase">Sets Commitment</p>
+                        <p class="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-4">Sets Commitment</p>
                         <div class="flex justify-center gap-2 flex-wrap">${[1,2,3,4,5].map(v => `<button onclick="window.app.updateTarget(${i}, 'sets', ${v})" class="w-12 h-12 rounded-xl border-2 font-black transition-all ${v === sVal ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-base bg-soft text-slate-400 opacity-60'}">${v}</button>`).join('')}</div>
                     </div>
                     <div class="mb-10 text-left">
-                        <p class="micro text-blue-600 mb-4 font-black uppercase">Rep Commitment</p>
+                        <p class="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-4">Rep Commitment</p>
                         <div class="flex items-center justify-center gap-8">
-                            <button onclick="window.app.updateTarget(${i}, 'reps', ${rVal - 1})" class="tune-btn btn-press">-</button>
+                            <button onclick="window.app.updateTarget(${i}, 'reps', ${rVal - 1})" class="tune-btn btn-press shadow-sm">-</button>
                             <span class="text-3xl font-black tabular-nums">${rVal}</span>
-                            <button onclick="window.app.updateTarget(${i}, 'reps', ${rVal + 1})" class="tune-btn btn-press">+</button>
+                            <button onclick="window.app.updateTarget(${i}, 'reps', ${rVal + 1})" class="tune-btn btn-press shadow-sm">+</button>
                         </div>
                     </div>
                     <div class="mb-12 text-left">
-                        <p class="micro text-blue-600 mb-4 font-black uppercase tracking-widest">Load Target</p>
+                        <p class="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-4">Load Target</p>
                         <div class="flex items-center justify-center gap-6">
                             <button onclick="window.app.adj(${i}, -2.5, true)" class="tune-btn btn-press shadow-sm">-</button>
                             <div class="text-center min-w-[80px]"><span class="text-3xl font-black tabular-nums">${lVal}</span><p class="text-[9px] font-black uppercase opacity-40 tracking-widest">Kilograms</p></div>
@@ -363,10 +363,10 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3 mb-4">
-                      <button onclick="window.app.resetVolumeToDefault(${i})" class="py-4 rounded-2xl border-2 border-base font-black micro text-slate-400">Reset Volume</button>
-                      <button onclick="window.app.resetWeightToInit(${i})" class="py-4 rounded-2xl border-2 border-base font-black micro text-blue-600">Reset Weight</button>
+                      <button onclick="window.app.resetVolumeToDefault(${i})" class="py-4 rounded-2xl border-2 border-base font-black text-[10px] uppercase text-slate-400">Reset Volume</button>
+                      <button onclick="window.app.resetWeightToInit(${i})" class="py-4 rounded-2xl border-2 border-base font-black text-[10px] uppercase text-blue-600">Reset Weight</button>
                     </div>
-                    <button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black micro shadow-xl uppercase tracking-widest">Lock Protocol</button>
+                    <button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black uppercase shadow-xl">Lock Protocol</button>
                 </div>`;
         }
 
@@ -374,17 +374,17 @@
             const barWeight = 8;
             if (w <= barWeight) {
                $('modal-overlay').style.display = 'flex';
-               $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="micro mb-2 uppercase tracking-widest opacity-40">Load Logic</p><h2 class="text-3xl font-black mb-8">${w} kg</h2><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white micro font-black uppercase shadow-xl">Confirm</button></div>`;
+               $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="text-[9px] font-black uppercase tracking-widest opacity-40 mb-2">Load Logic</p><h2 class="text-3xl font-black mb-8">${w} kg</h2><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black uppercase shadow-xl">Confirm</button></div>`;
                return;
             }
             let rem = (w - barWeight) / 2;
             const avail = [20, 10, 5, 2.5, 1.25], res = [];
             avail.forEach(x => { while(rem >= x - 1e-9) { res.push(x); rem -= x; }});
             $('modal-overlay').style.display = 'flex';
-            $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="micro mb-4 uppercase opacity-40 font-black tracking-widest">Plate Schematic</p><div class="mb-8"><h2 class="text-xs font-black uppercase text-slate-400 mb-1 tracking-tight">${name}</h2><p class="text-lg font-black text-blue-600">${barWeight} kg Bar + ${((w-barWeight)/2).toFixed(1)} kg/side</p></div><div class="flex flex-wrap justify-center gap-2 mb-10">${res.length ? res.map(v => `<span class="bg-blue-600 text-white font-black text-[11px] px-4 py-3 rounded-2xl shadow-sm">${v}kg</span>`).join('') : '<span class="text-slate-300 font-bold uppercase micro">Base Only</span>'}</div><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white micro font-black uppercase shadow-xl">Close</button></div>`;
+            $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="text-[9px] font-black uppercase tracking-widest opacity-40 mb-4">Plate Schematic</p><div class="mb-8"><h2 class="text-xs font-black uppercase text-slate-400 mb-1 tracking-tight">${name}</h2><p class="text-lg font-black text-blue-600">${barWeight} kg Bar + ${((w-barWeight)/2).toFixed(1)} kg/side</p></div><div class="flex flex-wrap justify-center gap-2 mb-10">${res.length ? res.map(v => `<span class="bg-blue-600 text-white font-black text-[11px] px-4 py-3 rounded-2xl shadow-sm">${v}kg</span>`).join('') : '<span class="text-slate-300 font-bold uppercase text-[9px] font-black">Base Only</span>'}</div><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black uppercase shadow-xl">Close</button></div>`;
         }
 
-        // --- MATRIX ---
+        // --- MATRIX RAIN ---
         function startMatrix() {
             const c = $('matrix-bg'); if(!c) return; const ctx = c.getContext('2d');
             c.width = window.innerWidth; c.height = window.innerHeight;
@@ -424,12 +424,12 @@
             showThemeSelector: () => {
                 $('modal-overlay').style.display = 'flex';
                 const th = [{id:'light', n:'Original'}, {id:'dark', n:'Midnight'}, {id:'cyber', n:'Matrix'}];
-                $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="micro mb-8 opacity-40 uppercase font-black tracking-widest">Theme Hub</p><div class="space-y-2 mb-8">${th.map(t => `<button onclick="window.app.setTheme('${t.id}')" class="w-full p-4 rounded-2xl border-2 font-black uppercase micro ${state.theme === t.id ? 'border-accent bg-soft' : 'border-base bg-card'}">${t.n}</button>`).join('')}</div><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black micro uppercase">Close</button></div>`;
+                $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="text-[9px] font-black uppercase tracking-widest opacity-40 mb-8">Visual Selection</p><div class="space-y-2 mb-8">${th.map(t => `<button onclick="window.app.setTheme('${t.id}')" class="w-full p-4 rounded-2xl border-2 font-black uppercase text-[10px] ${state.theme === t.id ? 'border-accent bg-soft' : 'border-base bg-card'}">${t.n}</button>`).join('')}</div><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black uppercase">Close</button></div>`;
             },
             setTheme: (t) => { state.theme = t; saveState(); render(false); window.app.showThemeSelector(); },
-            resetFull: () => { if(confirm('Clear current progress?')) { localStorage.clear(); state.manual = {}; state.focusIdx = null; render(true); }},
+            resetFull: () => { if(confirm('Clear current Split progress?')) { localStorage.clear(); state.manual = {}; state.focusIdx = null; render(true); }},
             handleSetToggle, skipRest: () => { clearInterval(state.timer); state.resting = false; $('footer-progress-bg').style.width = "0%"; render(false); },
-            finishSession: () => { if(confirm('Save weights?')) { (WORKOUTS[state.tab]||[]).forEach((ex, i) => { localStorage.setItem(`last-${state.tab}-${i}`, localStorage.getItem(`load-${state.tab}-${i}`) || ex.load); }); window.app.resetFull(); }},
+            finishSession: () => { if(confirm('Save weights?')) { WORKOUTS[state.tab].forEach((ex, i) => { localStorage.setItem(`last-${state.tab}-${i}`, localStorage.getItem(`load-${state.tab}-${i}`) || ex.load); }); window.app.resetFull(); }},
             showTune, closeModal: () => $('modal-overlay').style.display = 'none',
             toggleFold: (i) => { state.manual[state.tab+i] = !$(`ex-card-${i}`).classList.contains('is-collapsed'); saveState(); render(false); },
             updateTarget: (i, t, v) => { localStorage.setItem(`target-${t}-${state.tab}-${i}`, Math.max(1, v)); showTune(i); render(false); },
@@ -440,10 +440,10 @@
                 const ex = WORKOUTS[state.tab][idx];
                 if (ex.mech === 'stack') {
                     $('modal-overlay').style.display = 'flex';
-                    $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="micro mb-4 uppercase font-black opacity-40">Pin Hub</p><div class="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6"><svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16"><path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3.293L6.354 6.646a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 7.793V4.5z"/></svg></div><h2 class="text-3xl font-black mb-10">${w} kg</h2><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white micro font-black uppercase shadow-xl">Confirmed Pin</button></div>`;
+                    $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="text-[9px] font-black uppercase tracking-widest opacity-40 mb-4">Pin Hub</p><div class="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6"><svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16"><path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3.293L6.354 6.646a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 7.793V4.5z"/></svg></div><h2 class="text-3xl font-black mb-10">${w} kg</h2><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black uppercase shadow-xl">Confirmed</button></div>`;
                 } else if (ex.load === "0 kg") {
                      $('modal-overlay').style.display = 'flex';
-                     $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="micro mb-4 uppercase font-black opacity-40">Home Routine</p><h2 class="text-3xl font-black mb-10">Bodyweight</h2><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white micro font-black uppercase shadow-xl">Ready</button></div>`;
+                     $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="text-[9px] font-black uppercase tracking-widest opacity-40 mb-4">Home Routine</p><h2 class="text-3xl font-black mb-10">Bodyweight</h2><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black uppercase shadow-xl">Ready</button></div>`;
                 } else {
                     plates(w, 8, ex.name);
                 }
@@ -451,13 +451,13 @@
             showInfoView: (i) => {
                 const ex = WORKOUTS[state.tab][i];
                 $('modal-overlay').style.display = 'flex';
-                $('modal-content').innerHTML = `<div class="modal-body flex flex-col h-full"><p class="micro mb-4 opacity-40 text-center uppercase tracking-widest font-black">Technical Hub</p><div class="flex gap-2 mb-6"><div class="flex-1 bg-soft rounded-2xl p-4 border border-base flex flex-col items-center">${BLUEPRINT[ex.type] || ''}</div><div class="flex-1 bg-soft rounded-2xl p-4 border border-base flex flex-col items-center">${ANATOMY[ex.type] || ''}</div></div><h3 class="text-lg font-black uppercase mb-6 tracking-tight text-center">${ex.name}</h3><div class="space-y-6 text-left mb-10"><div class="cue-box"><p class="micro text-blue-500 mb-2 font-black uppercase">Technical Cues</p>${(ex.cues||[]).map((c,idx)=>`<p class="text-xs font-bold mb-1">${idx+1}. ${c}</p>`).join('')}</div><div class="avoid-box"><p class="micro text-red-500 mb-2 font-black uppercase">Avoid Mistakes</p>${(ex.avoid||[]).map(m=>`<p class="text-xs font-bold mb-1">✕ ${m}</p>`).join('')}</div></div><button onclick="window.open('https://www.youtube.com/results?search_query=${ex.q}', '_blank')" class="w-full py-4 rounded-2xl bg-blue-50 text-blue-600 font-black text-xs uppercase btn-press flex items-center justify-center gap-3 border border-blue-100 mb-4 tracking-widest">Video Tutorial</button><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black micro uppercase shadow-xl">Return</button></div>`;
+                $('modal-content').innerHTML = `<div class="modal-body flex flex-col h-full"><p class="text-[9px] font-black uppercase tracking-widest opacity-40 mb-4 text-center">Performance Hub</p><div class="flex gap-2 mb-6"><div class="flex-1 bg-soft rounded-2xl p-4 border border-base flex flex-col items-center">${BLUEPRINT[ex.type] || ''}</div><div class="flex-1 bg-soft rounded-2xl p-4 border border-base flex flex-col items-center">${ANATOMY[ex.type] || ''}</div></div><h3 class="text-lg font-black uppercase mb-6 tracking-tight text-center">${ex.name}</h3><div class="space-y-6 text-left mb-10"><div class="cue-box"><p class="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-2">Technical Protocol</p>${(ex.cues||[]).map((c,idx)=>`<p class="text-xs font-bold mb-1">${idx+1}. ${c}</p>`).join('')}</div><div class="avoid-box"><p class="text-[9px] font-black uppercase tracking-widest text-red-500 mb-2">Avoid Mistakes</p>${(ex.avoid||[]).map(m=>`<p class="text-xs font-bold mb-1">✕ ${m}</p>`).join('')}</div></div><button onclick="window.open('https://www.youtube.com/results?search_query=${ex.q}', '_blank')" class="w-full py-4 rounded-2xl bg-blue-50 text-blue-600 font-black text-[10px] uppercase shadow-sm flex items-center justify-center gap-3 border border-blue-100 mb-4 tracking-widest">Video Tutorial</button><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black uppercase shadow-xl">Return</button></div>`;
             },
             enterFocus: (idx) => {
                 state.focusIdx = idx === undefined ? 0 : idx; saveState();
                 const ex = WORKOUTS[state.tab][state.focusIdx]; if(!ex) return;
                 $('focus-overlay').style.display = 'flex';
-                $('focus-content').innerHTML = `<div class="text-center py-10 flex flex-col h-full"><h4 class="micro text-blue-600 mb-2 uppercase font-black tracking-widest">${ex.type}</h4><h1 class="text-3xl font-black uppercase tracking-tight mb-8">${ex.name}</h1><div class="focus-weight-display mb-12">${localStorage.getItem(`load-${state.tab}-${state.focusIdx}`) || ex.load}</div><div class="grid grid-cols-2 gap-4 text-left mb-12"><div class="cue-box"><p class="micro text-blue-500 mb-2 font-black uppercase tracking-widest">Technical Cues</p>${(ex.cues||[]).map(c => `<p class="text-xs font-bold mb-1">· ${c}</p>`).join('')}</div><div class="avoid-box"><p class="micro text-red-500 mb-2 font-black uppercase tracking-widest">Avoid</p>${(ex.avoid||[]).map(a => `<p class="text-xs font-bold mb-1">✕ ${a}</p>`).join('')}</div></div><button onclick="window.app.closeFocus()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black micro uppercase shadow-xl">Return to Tracker</button></div>`;
+                $('focus-content').innerHTML = `<div class="text-center py-10 flex flex-col h-full"><h4 class="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-2">${ex.type}</h4><h1 class="text-3xl font-black uppercase tracking-tight mb-8">${ex.name}</h1><div class="focus-weight-display mb-12">${localStorage.getItem(`load-${state.tab}-${state.focusIdx}`) || ex.load}</div><div class="grid grid-cols-2 gap-4 text-left mb-12"><div class="cue-box"><p class="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-2">Technical Cues</p>${(ex.cues||[]).map(c => `<p class="text-xs font-bold mb-1">· ${c}</p>`).join('')}</div><div class="avoid-box"><p class="text-[9px] font-black uppercase tracking-widest text-red-500 mb-2">Avoid</p>${(ex.avoid||[]).map(a => `<p class="text-xs font-bold mb-1">✕ ${a}</p>`).join('')}</div></div><button onclick="window.app.closeFocus()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black uppercase shadow-xl">Return to Tracker</button></div>`;
             },
             closeFocus: () => { state.focusIdx = null; saveState(); $('focus-overlay').style.display = 'none'; render(false); },
             prevStep: () => { const sess = WORKOUTS[state.tab]; for (let i = sess.length-1; i >= 0; i--) { for (let j = sess[i].setsMax; j >= 1; j--) { const k = `set-${state.tab}-${i}-${j}`; if (localStorage.getItem(k)) { localStorage.removeItem(k); render(false); return; }}}},
@@ -476,4 +476,3 @@
     </script>
 </body>
 </html>
-```eof
