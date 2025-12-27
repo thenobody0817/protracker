@@ -188,4 +188,292 @@
                 { name: "Lateral Delt Machine", type: "shoulder", reps: "15–20", setsTarget: 2, setsMax: 2, load: "15 kg", rest: 60, q: "lateral+delt+machine+form", mech: "stack", bar: 0, cues: ["High rep pump."], avoid: ["Shrug."] },
                 { name: "Reverse Pec Deck", type: "shoulder", reps: "15–20", setsTarget: 3, setsMax: 3, load: "12.5 kg", rest: 60, q: "reverse+pec+deck+form", mech: "stack", bar: 0, cues: ["Rear delt isolation."], avoid: ["Momentum."] },
                 { name: "Rope Hammer Curl", type: "arms", reps: "12–15", setsTarget: 2, setsMax: 2, load: "20 kg", rest: 45, q: "rope+hammer+curls+form", mech: "stack", bar: 0, cues: ["Thumbs up."], avoid: ["Shoulder roll."] },
-                { name: "SA Overhead Cable Triceps", type: "arms", reps: "12–15", setsTarget: 2, setsMax: 2, load: "12.5 kg", rest: 45, q: "single+arm+overhead+cable+triceps+extension+form", mech: "sta
+                { name: "SA Overhead Cable Triceps", type: "arms", reps: "12–15", setsTarget: 2, setsMax: 2, load: "12.5 kg", rest: 45, q: "single+arm+overhead+cable+triceps+extension+form", mech: "stack", bar: 0, cues: ["Deep stretch."], avoid: ["Lockout flare."] }
+            ]
+        };
+
+        // --- APP STATE ---
+        const state = {
+            tab: localStorage.getItem('activeTab') || 'A',
+            theme: localStorage.getItem('appTheme') || 'light',
+            manual: JSON.parse(localStorage.getItem('manualState') || '{}'),
+            focusIdx: localStorage.getItem('focusIdx') ? parseInt(localStorage.getItem('focusIdx')) : null,
+            scrollPos: parseInt(localStorage.getItem('scrollPos')) || 0,
+            isInitialLoad: true, timer: null, resting: false
+        };
+
+        const $ = id => document.getElementById(id);
+        const getVal = s => { if (!s) return 0; let m = s.toString().match(/(\d+(\.\d+)?)/); return m ? parseFloat(m[0]) : 0; };
+        const t2e = t => { switch(t){ case 'push': return '💪'; case 'pull': return '🛶'; case 'shoulder': return '🎯'; case 'arms': return '🔥'; case 'core': return '🏠'; default: return '⚡'; } };
+
+        function saveState() {
+            localStorage.setItem('activeTab', state.tab);
+            localStorage.setItem('appTheme', state.theme);
+            localStorage.setItem('manualState', JSON.stringify(state.manual));
+            localStorage.setItem('focusIdx', state.focusIdx === null ? "" : state.focusIdx);
+        }
+
+        window.onscroll = () => { if(!state.isInitialLoad) localStorage.setItem('scrollPos', window.scrollY); };
+
+        // --- RENDERER ---
+        function render(jump = true) {
+            document.documentElement.setAttribute('data-theme', state.theme);
+            if(state.theme === 'cyber') startMatrix(); else stopMatrix();
+            ['A','X','B','Y','C'].forEach(t => { const b = $(`btn-tab-${t}`); if(b) b.className = `nav-btn btn-press ${t === state.tab ? 'active' : ''}`; });
+
+            const list = $('main-list');
+            list.innerHTML = '';
+            
+            const session = WORKOUTS[state.tab] || [];
+            session.forEach((exercise, idx) => {
+                try {
+                    const curLoad = localStorage.getItem(`load-${state.tab}-${idx}`) || exercise.load;
+                    const lastLoad = localStorage.getItem(`last-${state.tab}-${idx}`) || "--";
+                    const userSets = localStorage.getItem(`target-sets-${state.tab}-${idx}`);
+                    const goalNum = parseInt(userSets) || exercise.setsTarget;
+                    const goalReps = localStorage.getItem(`target-reps-${state.tab}-${idx}`) || exercise.reps;
+                    const labelSets = userSets ? userSets : (exercise.setsTarget === exercise.setsMax ? exercise.setsTarget : `${exercise.setsTarget}–${exercise.setsMax}`);
+
+                    let folded = state.manual[state.tab + idx] !== undefined ? state.manual[state.tab + idx] : true;
+
+                    const initN = getVal(exercise.load);
+                    const curN = getVal(curLoad);
+                    let variance = '<span class="text-[10px] font-black opacity-10">0%</span>';
+                    if (initN > 0 && curN !== initN) {
+                        const p = Math.round(((curN - initN) / initN) * 100);
+                        variance = `<span class="text-[10px] font-black ${p > 0 ? 'text-emerald-500' : 'text-rose-500'}">${p > 0 ? '+' : ''}${p}%</span>`;
+                    }
+
+                    let dots = '';
+                    for (let s = 1; s <= exercise.setsMax; s++) {
+                        const checked = localStorage.getItem(`set-${state.tab}-${idx}-${s}`) === 'true';
+                        dots += `<button onclick="window.app.handleSetToggle(${idx}, ${s})" class="set-dot ${checked ? 'checked' : 'unchecked'} ${s > goalNum ? 'optional' : ''}">${checked ? '✓' : (s > goalNum ? '+' : s)}</button>`;
+                    }
+
+                    const cardName = exercise.name.replace(/'/g, "\\'");
+                    const card = document.createElement('div');
+                    card.id = `ex-card-${idx}`;
+                    card.className = `card relative ${folded ? 'is-collapsed' : ''}`;
+                    card.innerHTML = `
+                        <div class="relative flex items-center justify-between cursor-pointer" onclick="window.app.toggleFold(${idx})">
+                            <div class="icon-tile shrink-0">${t2e(exercise.type)}</div>
+                            <div class="flex-1 text-center px-4"><h4 class="exercise-title">${exercise.name}</h4></div>
+                            <div class="w-[44px]"></div>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="flex justify-center items-center gap-3 mt-4 mb-6">
+                                <button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=${exercise.q}', '_blank')" class="w-11 h-11 rounded-xl border border-base bg-blue-50 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center btn-press shadow-sm"><svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/></svg></button>
+                                <span onclick="event.stopPropagation(); window.app.showTune(${idx})" class="chip">${labelSets} x ${goalReps}</span>
+                                <button onclick="event.stopPropagation(); window.app.showInfoView(${idx})" class="w-11 h-11 rounded-xl border border-base bg-slate-50 dark:bg-slate-800 text-slate-400 flex items-center justify-center btn-press shadow-sm"><svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></button>  
+                            </div>
+                            <div class="flex justify-center gap-2 mb-6 flex-wrap">${dots}</div>
+                            <div class="load-strip" onclick="window.app.openLoadingModal(${idx}, ${getVal(curLoad)})">
+                                <div class="flex flex-col items-center">
+                                    <span class="text-sm font-black text-blue-600 dark:text-blue-400">${curLoad}</span>
+                                    <div class="opacity-50 text-[9px] font-black uppercase mt-1 tracking-widest">Init: ${exercise.load} | Last: ${lastLoad}</div>
+                                    ${variance}
+                                </div>
+                            </div>
+                        </div>`;
+                    list.appendChild(card);
+                } catch(e) { console.error("Ironclad Engine error on index " + idx, e); }
+            });
+            updateStats(); updateFooter();
+            if(state.focusIdx !== null) enterFocus(state.focusIdx);
+            if(state.isInitialLoad && jump) {
+                setTimeout(() => { window.scrollTo({ top: state.scrollPos, behavior: 'instant' }); state.isInitialLoad = false; }, 80);
+            }
+        }
+
+        // --- ACTIONS ---
+        function handleSetToggle(idx, sNum) {
+            const key = `set-${state.tab}-${idx}-${sNum}`;
+            if (!localStorage.getItem(key)) {
+                for(let s = 1; s <= sNum; s++) { localStorage.setItem(`set-${state.tab}-${idx}-${s}`, 'true'); }
+                if(WORKOUTS[state.tab][idx].rest) startRest(WORKOUTS[state.tab][idx].rest);
+            } else {
+                localStorage.removeItem(key);
+            }
+            render(false);
+        }
+
+        function startRest(sec) {
+            clearInterval(state.timer); state.resting = true;
+            let t = sec; const bg = $('footer-progress-bg');
+            state.timer = setInterval(() => {
+                t--; bg.style.width = (t/sec * 100) + "%"; $('coach-set').innerText = `Rest: ${t}s`;
+                updateFooter(); if (t <= 0) { state.resting = false; bg.style.width = "0%"; render(false); }
+            }, 1000);
+        }
+
+        function updateFooter() {
+            const sess = WORKOUTS[state.tab] || [];
+            let activeEx = null, activeIdx = -1, sNum = -1;
+            if (state.resting) { 
+                $('coach-controls').innerHTML = `<button onclick="window.app.skipRest()" class="px-8 h-14 rounded-2xl text-white text-xs font-black uppercase bg-amber-500 btn-press">Skip Rest</button>`; 
+                return; 
+            }
+            for (let i = 0; i < sess.length; i++) {
+                const goal = parseInt(localStorage.getItem(`target-sets-${state.tab}-${i}`)) || sess[i].setsTarget;
+                let doneCount = 0; for (let j = 1; j <= sess[i].setsMax; j++) if (localStorage.getItem(`set-${state.tab}-${i}-${j}`) === 'true') doneCount++;
+                if (doneCount >= goal) continue;
+                activeEx = sess[i]; activeIdx = i; sNum = doneCount + 1; break;
+            }
+            if (!activeEx) {
+                $('coach-name').innerText = "Session Complete!"; 
+                $('coach-controls').innerHTML = `<button onclick="window.app.finishSession()" class="px-8 h-14 rounded-2xl text-white text-xs font-black bg-rose-500 btn-press">Finish</button>`; return;
+            }
+            $('coach-name').innerText = activeEx.name;
+            $('coach-load').innerText = localStorage.getItem(`load-${state.tab}-${activeIdx}`) || activeEx.load;
+            const repsLabel = localStorage.getItem(`target-reps-${state.tab}-${activeIdx}`) || activeEx.reps;
+            $('coach-reps').innerText = `${repsLabel} Reps`;
+            $('coach-set').innerText = `Set ${sNum}`;
+            $('coach-controls').innerHTML = `<button onclick="window.app.prevStep()" class="w-14 h-14 rounded-2xl bg-card border border-base flex items-center justify-center btn-press"><svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/></svg></button><button onclick="window.app.nextStep()" class="px-12 h-14 rounded-2xl text-white text-xs font-black bg-emerald-600 shadow-lg shadow-emerald-500/20">Next</button>`;
+        }
+
+        // --- INTERFACE MODALS ---
+        function showTune(i) {
+            const ex = WORKOUTS[state.tab][i];
+            const sVal = parseInt(localStorage.getItem(`target-sets-${state.tab}-${i}`)) || ex.setsTarget;
+            const rVal = parseInt(localStorage.getItem(`target-reps-${state.tab}-${i}`)) || getVal(ex.reps);
+            const lLabel = localStorage.getItem(`load-${state.tab}-${i}`) || ex.load;
+            const lVal = getVal(lLabel);
+            $('modal-overlay').style.display = 'flex';
+            $('modal-content').innerHTML = `
+                <div class="modal-body text-center">
+                    <p class="micro mb-8 opacity-40 uppercase tracking-widest font-black">Target Tuning</p>
+                    <div class="mb-10 text-left">
+                        <p class="micro text-blue-600 mb-4 font-black uppercase">Sets Goal</p>
+                        <div class="flex justify-center gap-2 flex-wrap">${[1,2,3,4,5].map(v => `<button onclick="window.app.updateTarget(${i}, 'sets', ${v})" class="w-12 h-12 rounded-xl border-2 font-black transition-all ${v === sVal ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-base bg-soft text-slate-400 opacity-60'}">${v}</button>`).join('')}</div>
+                    </div>
+                    <div class="mb-10 text-left">
+                        <p class="micro text-blue-600 mb-4 font-black uppercase">Rep Goal</p>
+                        <div class="flex items-center justify-center gap-8">
+                            <button onclick="window.app.updateTarget(${i}, 'reps', ${rVal - 1})" class="tune-btn btn-press">-</button>
+                            <span class="text-3xl font-black tabular-nums">${rVal}</span>
+                            <button onclick="window.app.updateTarget(${i}, 'reps', ${rVal + 1})" class="tune-btn btn-press">+</button>
+                        </div>
+                    </div>
+                    <div class="mb-12 text-left">
+                        <p class="micro text-blue-600 mb-4 font-black uppercase tracking-widest">Load Target</p>
+                        <div class="flex items-center justify-center gap-6">
+                            <button onclick="window.app.adj(${i}, -2.5, true)" class="tune-btn btn-press shadow-sm">-</button>
+                            <div class="text-center min-w-[80px]"><span class="text-3xl font-black tabular-nums">${lVal}</span><p class="text-[9px] font-black uppercase opacity-40 tracking-widest">Kilograms</p></div>
+                            <button onclick="window.app.adj(${i}, 2.5, true)" class="tune-btn btn-press shadow-sm">+</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                      <button onclick="window.app.resetVolumeToDefault(${i})" class="py-4 rounded-2xl border-2 border-base font-black micro text-slate-400">Reset Volume</button>
+                      <button onclick="window.app.resetWeightToInit(${i})" class="py-4 rounded-2xl border-2 border-base font-black micro text-blue-600">Reset Weight</button>
+                    </div>
+                    <button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black micro uppercase shadow-xl">Lock</button>
+                </div>`;
+        }
+
+        function plates(w, bar, name) {
+            const barWeight = 8;
+            if (w <= barWeight) {
+               $('modal-overlay').style.display = 'flex';
+               $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="micro mb-2 uppercase tracking-widest opacity-40">Load Logic</p><h2 class="text-3xl font-black mb-8">${w} kg</h2><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white micro font-black">Confirm</button></div>`;
+               return;
+            }
+            let rem = (w - barWeight) / 2;
+            const avail = [20, 10, 5, 2.5, 1.25], res = [];
+            avail.forEach(x => { while(rem >= x - 1e-9) { res.push(x); rem -= x; }});
+            $('modal-overlay').style.display = 'flex';
+            $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="micro mb-4 uppercase opacity-40 font-black tracking-widest">Plate Schematic</p><div class="mb-8"><h2 class="text-xs font-black uppercase text-slate-400 mb-1 tracking-tight">${name}</h2><p class="text-lg font-black text-blue-600">${barWeight} kg Bar + ${((w-barWeight)/2).toFixed(1)} kg/side</p></div><div class="flex flex-wrap justify-center gap-2 mb-10">${res.length ? res.map(v => `<span class="bg-blue-600 text-white font-black text-[11px] px-4 py-3 rounded-2xl shadow-sm">${v}kg</span>`).join('') : '<span class="text-slate-300 font-bold uppercase micro">Base Mass</span>'}</div><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white micro font-black uppercase shadow-xl">Close</button></div>`;
+        }
+
+        // --- MATRIX ---
+        function startMatrix() {
+            const c = $('matrix-bg'); if(!c) return; const ctx = c.getContext('2d');
+            c.width = window.innerWidth; c.height = window.innerHeight;
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+            const fontSize = 14, columns = c.width/fontSize, drops = Array(Math.floor(columns)).fill(1);
+            if (state.matrixInterval) clearInterval(state.matrixInterval);
+            state.matrixInterval = setInterval(() => {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; ctx.fillRect(0,0,c.width,c.height);
+                ctx.fillStyle = '#10b981'; ctx.font = fontSize + 'px monospace';
+                drops.forEach((y, i) => {
+                    const text = alphabet.charAt(Math.floor(Math.random()*alphabet.length));
+                    ctx.fillText(text, i*fontSize, y*fontSize);
+                    if (y*fontSize > c.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                });
+            }, 33);
+        }
+        function stopMatrix() { if (state.matrixInterval) { clearInterval(state.matrixInterval); state.matrixInterval = null; } }
+
+        function updateStats() {
+            const data = WORKOUTS[state.tab] || [];
+            let total = 0, done = 0;
+            data.forEach((ex, i) => { 
+                const goal = parseInt(localStorage.getItem(`target-sets-${state.tab}-${i}`)) || ex.setsTarget;
+                total += goal; 
+                for(let j=1; j<=goal; j++) if(localStorage.getItem(`set-${state.tab}-${i}-${j}`) === 'true') done++; 
+            });
+            const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+            $('progress-percent').innerText = pct + "%";
+            $('progress-bar').style.width = pct + "%";
+            $('sets-done').innerText = done; $('sets-total').innerText = total;
+        }
+
+        // --- GLOBAL API ---
+        window.app = {
+            render, setTab: (t) => { state.tab = t; state.manual = {}; saveState(); render(true); },
+            showThemeSelector: () => {
+                $('modal-overlay').style.display = 'flex';
+                const th = [{id:'light', n:'Original'}, {id:'dark', n:'Midnight'}, {id:'cyber', n:'Matrix'}];
+                $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="micro mb-8 opacity-40 uppercase font-black tracking-widest">Theme Hub</p><div class="space-y-2 mb-8">${th.map(t => `<button onclick="window.app.setTheme('${t.id}')" class="w-full p-4 rounded-2xl border-2 font-black uppercase micro ${state.theme === t.id ? 'border-accent bg-soft' : 'border-base bg-card'}">${t.n}</button>`).join('')}</div><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black micro uppercase">Close</button></div>`;
+            },
+            setTheme: (t) => { state.theme = t; saveState(); render(false); window.app.showThemeSelector(); },
+            resetFull: () => { if(confirm('Clear all session progress?')) { localStorage.clear(); state.manual = {}; state.focusIdx = null; render(true); }},
+            handleSetToggle, skipRest: () => { clearInterval(state.timer); state.resting = false; $('footer-progress-bg').style.width = "0%"; render(false); },
+            finishSession: () => { if(confirm('Save weights?')) { (WORKOUTS[state.tab]||[]).forEach((ex, i) => { localStorage.setItem(`last-${state.tab}-${i}`, localStorage.getItem(`load-${state.tab}-${i}`) || ex.load); }); window.app.resetFull(); }},
+            showTune, closeModal: () => $('modal-overlay').style.display = 'none',
+            toggleFold: (i) => { state.manual[state.tab+i] = !$(`ex-card-${i}`).classList.contains('is-collapsed'); saveState(); render(false); },
+            updateTarget: (i, t, v) => { localStorage.setItem(`target-${t}-${state.tab}-${i}`, Math.max(1, v)); showTune(i); render(false); },
+            adj: (i, d, tune) => { const k = `load-${state.tab}-${i}`; let n = getVal(localStorage.getItem(k) || WORKOUTS[state.tab][i].load); n = Math.max(0, n+d); localStorage.setItem(k, (n % 1 === 0 ? n : n.toFixed(1)) + " kg"); if(tune) showTune(i); render(false); if(state.focusIdx !== null) window.app.enterFocus(i); },
+            resetVolumeToDefault: (i) => { localStorage.removeItem(`target-sets-${state.tab}-${i}`); localStorage.removeItem(`target-reps-${state.tab}-${i}`); render(false); showTune(i); },
+            resetWeightToInit: (i) => { localStorage.removeItem(`load-${state.tab}-${i}`); render(false); showTune(i); },
+            openLoadingModal: (idx, w) => {
+                const ex = WORKOUTS[state.tab][idx];
+                if (ex.mech === 'stack') {
+                    $('modal-overlay').style.display = 'flex';
+                    $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="micro mb-4 uppercase font-black opacity-40">Pin Context</p><div class="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6"><svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16"><path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3.293L6.354 6.646a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 7.793V4.5z"/></svg></div><h2 class="text-3xl font-black mb-10">${w} kg</h2><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white micro font-black uppercase shadow-xl">Confirmed Pin</button></div>`;
+                } else if (ex.load === "0 kg") {
+                     $('modal-overlay').style.display = 'flex';
+                     $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="micro mb-4 uppercase font-black opacity-40">Maintenance Protocol</p><h2 class="text-3xl font-black mb-10">Bodyweight</h2><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white micro font-black uppercase shadow-xl">Ready</button></div>`;
+                } else {
+                    plates(w, 8, ex.name);
+                }
+            },
+            showInfoView: (i) => {
+                const ex = WORKOUTS[state.tab][i];
+                $('modal-overlay').style.display = 'flex';
+                $('modal-content').innerHTML = `<div class="modal-body flex flex-col h-full"><p class="micro mb-4 opacity-40 text-center uppercase tracking-widest font-black">Technical Hub</p><div class="flex gap-2 mb-6"><div class="flex-1 bg-soft rounded-2xl p-4 border border-base flex flex-col items-center">${BLUEPRINT[ex.type] || ''}</div><div class="flex-1 bg-soft rounded-2xl p-4 border border-base flex flex-col items-center">${ANATOMY[ex.type] || ''}</div></div><h3 class="text-lg font-black uppercase mb-6 tracking-tight text-center">${ex.name}</h3><div class="space-y-6 text-left mb-10"><div class="cue-box"><p class="micro text-blue-500 mb-2 font-black uppercase">Technical Cues</p>${(ex.cues||[]).map((c,idx)=>`<p class="text-xs font-bold mb-1">${idx+1}. ${c}</p>`).join('')}</div><div class="avoid-box"><p class="micro text-red-500 mb-2 font-black uppercase">Avoid Mistakes</p>${(ex.avoid||[]).map(m=>`<p class="text-xs font-bold mb-1">✕ ${m}</p>`).join('')}</div></div><button onclick="window.open('https://www.youtube.com/results?search_query=${ex.q}', '_blank')" class="w-full py-4 rounded-2xl bg-blue-50 text-blue-600 font-black text-xs uppercase btn-press flex items-center justify-center gap-3 border border-blue-100 mb-4 tracking-widest">Video Tutorial</button><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black micro uppercase shadow-xl">Return</button></div>`;
+            },
+            enterFocus: (idx) => {
+                state.focusIdx = idx === undefined ? 0 : idx; saveState();
+                const ex = WORKOUTS[state.tab][state.focusIdx]; if(!ex) return;
+                $('focus-overlay').style.display = 'flex';
+                $('focus-content').innerHTML = `<div class="text-center py-10 flex flex-col h-full"><h4 class="micro text-blue-600 mb-2 uppercase font-black tracking-widest">${ex.type}</h4><h1 class="text-3xl font-black uppercase tracking-tight mb-8">${ex.name}</h1><div class="focus-weight-display mb-12">${localStorage.getItem(`load-${state.tab}-${state.focusIdx}`) || ex.load}</div><div class="grid grid-cols-2 gap-4 text-left mb-12"><div class="cue-box"><p class="micro text-blue-500 mb-2 font-black uppercase">Technical Cues</p>${(ex.cues||[]).map(c => `<p class="text-xs font-bold mb-1">· ${c}</p>`).join('')}</div><div class="avoid-box"><p class="micro text-red-500 mb-2 font-black uppercase">Avoid</p>${(ex.avoid||[]).map(a => `<p class="text-xs font-bold mb-1">✕ ${a}</p>`).join('')}</div></div><button onclick="window.app.closeFocus()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black micro uppercase shadow-xl">Return to Protocol</button></div>`;
+            },
+            closeFocus: () => { state.focusIdx = null; saveState(); $('focus-overlay').style.display = 'none'; render(false); },
+            prevStep: () => { const sess = WORKOUTS[state.tab]; for (let i = sess.length-1; i >= 0; i--) { for (let j = sess[i].setsMax; j >= 1; j--) { const k = `set-${state.tab}-${i}-${j}`; if (localStorage.getItem(k)) { localStorage.removeItem(k); render(false); return; }}}},
+            nextStep: () => {
+                const sess = WORKOUTS[state.tab];
+                for (let i = 0; i < sess.length; i++) {
+                    const goal = parseInt(localStorage.getItem(`target-sets-${state.tab}-${i}`)) || sess[i].setsTarget;
+                    for (let j = 1; j <= sess[i].setsMax; j++) {
+                        if (!localStorage.getItem(`set-${state.tab}-${i}-${j}`)) { handleSetToggle(i, j); return; }
+                    }
+                }
+            }
+        };
+
+        window.onload = () => render();
+    </script>
+</body>
+</html>
+
