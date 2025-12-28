@@ -15,28 +15,6 @@
             --radius-lg: 28px;
         }
 
-        /* --- MOLECULE TRANSITION STYLES --- */
-        #molecule-overlay {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 10000;
-            overflow: hidden;
-            perspective: 1000px;
-        }
-
-        .molecule {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background: var(--accent);
-            border-radius: 50%;
-            filter: blur(0.5px);
-            box-shadow: 0 0 8px var(--accent), 0 0 15px var(--accent);
-            opacity: 0;
-            will-change: transform, opacity;
-        }
-
         /* --- THEME SYSTEM --- */
         html[data-theme="light"],
         html:not([data-theme]) {
@@ -197,21 +175,6 @@
             position: relative;
         }
 
-        #main-list {
-            transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        #main-list.is-transitioning {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .session-blur {
-            filter: blur(12px);
-            opacity: 0;
-            pointer-events: none;
-        }
-
         header {
             padding-top: env(safe-area-inset-top, 8px);
             margin-bottom: 24px;
@@ -228,7 +191,6 @@
             box-shadow: var(--shadow-card);
             padding: 20px;
             position: relative;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
         }
 
@@ -253,11 +215,9 @@
 
         .card.is-active {
             border: 2px solid var(--active-border);
-            transform: scale(1.01);
         }
 
         html[data-theme="glass"] .card.is-active {
-            transform: scale(1.02);
             background: rgba(255, 255, 255, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.9);
             box-shadow: 0 20px 50px -10px rgba(37, 99, 235, 0.25),
@@ -314,7 +274,7 @@
             justify-content: center;
             font-weight: 900;
             font-size: 16px;
-            transition: all 0.15s ease;
+            transition: none;
             background: var(--bg-soft);
             color: var(--muted);
             cursor: pointer;
@@ -347,8 +307,6 @@
             background: var(--accent-2);
             color: white;
             border-color: transparent;
-            transform: scale(1.1);
-            animation: pulse-success 0.5s ease-out;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
@@ -387,7 +345,6 @@
         .collapsible-content {
             max-height: 1000px;
             overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 1;
             margin-top: 16px;
             padding-top: 4px;
@@ -1156,8 +1113,6 @@
                 try {
                     const curLoad = localStorage.getItem(`load-${state.tab}-${idx}`) || exercise.load;
                     const goalSets = parseInt(localStorage.getItem(`target-sets-${state.tab}-${idx}`)) || exercise.setsTarget;
-                    const goalReps = localStorage.getItem(`target-reps-${state.tab}-${idx}`) || exercise.reps;
-
                     let doneCount = 0;
                     for (let s = 1; s <= 5; s++) if (localStorage.getItem(`set-${state.tab}-${idx}-${s}`) === 'true') doneCount++;
 
@@ -1172,7 +1127,7 @@
 
                     const cardIcon = exercise.icon ? exercise.icon : t2e(exercise.type);
                     // Use time as primary display if weight is 0 and it's a time movement
-                    const primaryValue = (getVal(curLoad) === 0 && exercise.isTime) ? goalReps : curLoad;
+                    const primaryValue = (getVal(curLoad) === 0 && exercise.isTime) ? (localStorage.getItem(`target-reps-${state.tab}-${idx}`) || exercise.reps) : curLoad;
 
                     const card = document.createElement('div');
                     card.id = `ex-card-${idx}`;
@@ -1429,6 +1384,7 @@
             const lVal = getVal(lLabel);
 
             $('modal-overlay').style.display = 'flex';
+            $('modal-content').style.display = 'block'; // Show modal content
 
             // --- THEME & HARDWARE LOGIC ---
             const accentColor = 'var(--accent)';
@@ -1556,6 +1512,7 @@
             }
 
             $('modal-overlay').style.display = 'flex';
+            $('modal-content').style.display = 'block'; // Show modal content
             $('modal-content').innerHTML = `
                 <div class="modal-body flex flex-col h-full">
                     <p class="micro mb-8 opacity-40 text-center uppercase font-black tracking-widest leading-none">Technical Intelligence Hub</p>
@@ -1621,78 +1578,14 @@
             render,
             setTab: (t) => {
                 if (state.tab === t) return;
-                const container = $('main-list');
-                const overlay = $('molecule-overlay');
-                const cards = Array.from(container.querySelectorAll('.card'));
-
-                // 1. DISINTEGRATE
-                container.classList.add('is-transitioning');
-                const molecules = [];
-
-                cards.forEach(card => {
-                    const rect = card.getBoundingClientRect();
-                    const count = 15; // Molecules per card
-                    for (let i = 0; i < count; i++) {
-                        const m = document.createElement('div');
-                        m.className = 'molecule';
-                        m.style.left = (rect.left + rect.width / 2) + 'px';
-                        m.style.top = (rect.top + rect.height / 2) + 'px';
-                        overlay.appendChild(m);
-
-                        const angle = Math.random() * Math.PI * 2;
-                        const dist = 50 + Math.random() * 150;
-                        const tx = Math.cos(angle) * dist;
-                        const ty = Math.sin(angle) * dist;
-                        const tz = Math.random() * 500 - 250;
-
-                        m.animate([
-                            { opacity: 0, transform: 'translate(0,0) scale(0)' },
-                            { opacity: 1, transform: `translate(${tx}px, ${ty}px) scale(1.5)` }
-                        ], { duration: 400, fill: 'forwards', easing: 'cubic-bezier(0.19, 1, 0.22, 1)' });
-
-                        molecules.push({ el: m, tx, ty });
-                    }
-                });
-
-                setTimeout(() => {
-                    // Update state and render
-                    state.tab = t;
-                    state.activeIdx = 0;
-                    saveState();
-                    render(true);
-
-                    // 2. REASSEMBLE
-                    const newCards = Array.from(container.querySelectorAll('.card'));
-                    const totalMolecules = molecules.length;
-                    const moleculesPerCard = Math.floor(totalMolecules / (newCards.length || 1));
-
-                    newCards.forEach((card, cardIdx) => {
-                        const rect = card.getBoundingClientRect();
-                        const start = cardIdx * moleculesPerCard;
-                        const end = (cardIdx === newCards.length - 1) ? totalMolecules : start + moleculesPerCard;
-
-                        for (let i = start; i < end; i++) {
-                            const m = molecules[i];
-                            const destX = rect.left + Math.random() * rect.width;
-                            const destY = rect.top + Math.random() * rect.height;
-
-                            const currentTransform = m.el.style.transform;
-
-                            m.el.animate([
-                                { opacity: 1 },
-                                { opacity: 0, transform: `translate(${destX - parseFloat(m.el.style.left)}px, ${destY - parseFloat(m.el.style.top)}px) scale(0.5)` }
-                            ], { duration: 500, delay: Math.random() * 200, fill: 'forwards', easing: 'cubic-bezier(0.77, 0, 0.175, 1)' });
-                        }
-                    });
-
-                    setTimeout(() => {
-                        container.classList.remove('is-transitioning');
-                        overlay.innerHTML = ''; // Cleanup
-                    }, 800);
-                }, 400);
+                state.tab = t;
+                state.activeIdx = 0;
+                saveState();
+                render(true);
             },
             showThemeSelector: () => {
                 $('modal-overlay').style.display = 'flex';
+                $('modal-content').style.display = 'block';
                 const th = [{ id: 'light', n: 'Original' }, { id: 'dark', n: 'Midnight' }, { id: 'glass', n: 'Glass' }, { id: 'cyber', n: 'Matrix' }];
                 $('modal-content').innerHTML = `<div class="modal-body text-center"><p class="micro mb-8 opacity-40 uppercase font-black leading-none">Visual Selection</p><div class="space-y-2 mb-8">${th.map(t => `<button onclick="window.app.setTheme('${t.id}')" class="w-full p-4 rounded-2xl border-2 font-black uppercase text-[10px] ${state.theme === t.id ? 'border-accent bg-soft' : 'border-base bg-card'}">${t.n}</button>`).join('')}</div><button onclick="window.app.closeModal()" class="w-full py-4 rounded-2xl bg-slate-900 text-white font-black uppercase leading-none">Close</button></div>`;
             },
