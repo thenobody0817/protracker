@@ -925,7 +925,7 @@
         <div class="fs-header">
             <h2 class="text-xl font-black italic uppercase tracking-tighter" style="color: var(--accent)">Pro Track
                 Focus</h2>
-            <button onclick="window.app.toggleFullscreen()"
+            <button aria-label="Close focus mode" onclick="window.app.toggleFullscreen()"
                 class="w-10 h-10 rounded-xl bg-soft border border-base flex items-center justify-center text-muted">
                 <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 6L6 18M6 6l12 12" />
@@ -1134,15 +1134,25 @@
                     card.className = `card ${isActive ? 'is-active' : ''} ${isDone && !isActive ? 'is-done' : ''}`;
                     card.onclick = () => window.app.selectCard(idx);
 
+                    // Palette: Accessibility Improvements
+                    card.setAttribute('role', 'button');
+                    card.setAttribute('tabindex', '0');
+                    card.onkeydown = (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            window.app.selectCard(idx);
+                        }
+                    };
+
                     card.innerHTML = `
                         <div class="flex items-center justify-between">
                             <div class="icon-tile">${cardIcon}</div>
                             <div class="flex-1 px-4 text-center"><h4 class="exercise-title">${exercise.name}</h4></div>
-                            <button onclick="event.stopPropagation(); window.app.showInfoView(${idx})" class="w-11 h-11 rounded-xl bg-soft border border-base flex items-center justify-center text-muted"><svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></button>
+                            <button aria-label="View technical details for ${exercise.name}" onclick="event.stopPropagation(); window.app.showInfoView(${idx})" class="w-11 h-11 rounded-xl bg-soft border border-base flex items-center justify-center text-muted"><svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></button>
                         </div>
                         <div class="collapsible-content">
                             <div class="flex justify-center gap-2 mb-4">${dots}</div>
-                            <div class="load-strip" onclick="event.stopPropagation(); window.app.showMechanicsHub(${idx})">
+                            <div class="load-strip" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.stopPropagation();event.preventDefault();window.app.showMechanicsHub(${idx})}" onclick="event.stopPropagation(); window.app.showMechanicsHub(${idx})">
                                 <div class="flex flex-col items-center">
                                     <span class="text-sm font-black uppercase tracking-tighter" style="color: var(--accent)">${primaryValue}</span>
                                     <div class="text-[8px] font-black uppercase mt-0.5 tracking-widest leading-none" style="color: var(--muted); opacity: 0.6">Mechanics Hub</div>
