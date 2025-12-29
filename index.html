@@ -1705,7 +1705,17 @@
                     stopTimer();
                     refreshAll();
                     if (window.Notification && Notification.permission === "granted") {
-                        try { new Notification("Pro Track", { body: "Rest Period Complete. Return to Station." }); } catch (e) { console.log("Notification failed", e); }
+                        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                            navigator.serviceWorker.ready.then(reg => {
+                                reg.showNotification("Pro Track", {
+                                    body: "Rest Period Complete. Return to Station.",
+                                    vibrate: [200, 100, 200],
+                                    requireInteraction: true
+                                });
+                            });
+                        } else {
+                            try { new Notification("Pro Track", { body: "Rest Period Complete. Return to Station." }); } catch (e) { console.log("Notification failed", e); }
+                        }
                     }
                 }
             }, 500);
@@ -2400,10 +2410,20 @@ Result: any future program, regardless of how different, will snap into your ori
                 if (!window.Notification) return alert('Notifications not supported on this device.');
                 Notification.requestPermission().then(p => {
                     if (p === 'granted') {
-                        new Notification('Pro Track', {
-                            body: 'Notification System Active. Tap to dismiss.',
-                            requireInteraction: true
-                        });
+                        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                            navigator.serviceWorker.ready.then(registration => {
+                                registration.showNotification('Pro Track', {
+                                    body: 'Service Worker Notification Active. Tap to dismiss.',
+                                    requireInteraction: true,
+                                    vibrate: [200, 100, 200]
+                                });
+                            });
+                        } else {
+                            new Notification('Pro Track', {
+                                body: 'Standard Notification Active. Tap to dismiss.',
+                                requireInteraction: true
+                            });
+                        }
                     } else {
                         alert('Permission Denied: ' + p + '. Please enable notifications in your browser settings.');
                     }
@@ -2492,7 +2512,14 @@ Result: any future program, regardless of how different, will snap into your ori
             }
         };
 
-        window.onload = () => render();
+        window.onload = () => {
+            render();
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW Registered', reg))
+                    .catch(err => console.log('SW Fail', err));
+            }
+        };
     </script>
 </body>
 

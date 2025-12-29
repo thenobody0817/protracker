@@ -47,3 +47,18 @@ self.addEventListener('fetch', (e) => {
             .catch(() => caches.match(e.request))
     );
 });
+
+// 4. Notification Click Handler
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+            // If the app is already open, focus it
+            for (const client of clientList) {
+                if (client.url.includes('index.html') && 'focus' in client) return client.focus();
+            }
+            // Otherwise open it (optional, usually index.html)
+            if (clients.openWindow) return clients.openWindow('./index.html');
+        })
+    );
+});
