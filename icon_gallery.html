@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Tracker: Icon Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            padding: 40px;
+            transition: background 0.3s, color 0.3s;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 20px;
+        }
+
+        .icon-card {
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .icon-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .icon-svg {
+            width: 100%;
+            height: 100%;
+            transition: all 0.3s;
+        }
+
+        .label {
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        /* --- THEME STYLES --- */
+
+        /* 1. LIGHT (Minimal) */
+        body.theme-light {
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        .theme-light .icon-card {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .theme-light .icon-svg {
+            fill: none;
+            stroke: #334155;
+            stroke-width: 2px;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .theme-light .icon-card:hover {
+            border-color: #94a3b8;
+        }
+
+        .theme-light .label {
+            color: #64748b;
+        }
+
+        /* 2. DARK (Bold/Solid) */
+        body.theme-dark {
+            background: #0f172a;
+            color: white;
+        }
+
+        .theme-dark .icon-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+        }
+
+        .theme-dark .icon-svg {
+            fill: white;
+            stroke: none;
+        }
+
+        /* Solid fill style */
+        .theme-dark .label {
+            color: #94a3b8;
+        }
+
+        .theme-dark .control-panel {
+            border-color: #334155 !important;
+            background: #1e293b !important;
+        }
+
+        /* 3. GLASS (Duotone) */
+        body.theme-glass {
+            background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .theme-glass .icon-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-glass .icon-svg {
+            fill: rgba(255, 255, 255, 0.2);
+            stroke: white;
+            stroke-width: 1.5px;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .theme-glass .label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .theme-glass .control-panel {
+            background: rgba(0, 0, 0, 0.2) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        /* 4. CYBER (Neon) */
+        body.theme-cyber {
+            background: repeating-linear-gradient(0deg, #000 0px, #000 2px, #050505 4px);
+            background-size: 100% 4px;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+        }
+
+        .theme-cyber .icon-card {
+            background: black;
+            border: 1px solid #00ff41;
+            box-shadow: 0 0 5px rgba(0, 255, 65, 0.2);
+        }
+
+        .theme-cyber .icon-svg {
+            fill: none;
+            stroke: #00ff41;
+            stroke-width: 2px;
+            filter: drop-shadow(0 0 3px #00ff41);
+            stroke-linecap: square;
+            stroke-linejoin: miter;
+        }
+
+        .theme-cyber .label {
+            color: #00ff41;
+            text-shadow: 0 0 5px #00ff41;
+        }
+
+        .theme-cyber .control-panel {
+            background: black !important;
+            border-color: #00ff41 !important;
+        }
+
+        .theme-cyber button {
+            border-radius: 0 !important;
+            font-family: monospace;
+        }
+
+        /* CONTROLS */
+        .control-panel {
+            position: sticky;
+            top: 20px;
+            z-index: 50;
+            background: white;
+            padding: 10px;
+            border-radius: 99px;
+            display: inline-flex;
+            gap: 5px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-btn {
+            padding: 8px 16px;
+            border-radius: 99px;
+            font-weight: 800;
+            font-size: 11px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+            background: transparent;
+            color: inherit;
+            opacity: 0.5;
+        }
+
+        .control-btn.active {
+            background: currentColor;
+            color: var(--bg-inverse);
+            opacity: 1;
+        }
+
+        /* Inverse logic for active button text color handled by specific themes roughly, 
+           or just rely on contrast. For simplicity: */
+        .theme-light .control-btn.active {
+            color: white;
+            background: #0f172a;
+        }
+
+        .theme-dark .control-btn.active {
+            color: black;
+            background: white;
+        }
+
+        .theme-glass .control-btn.active {
+            color: #3b82f6;
+            background: white;
+        }
+
+        .theme-cyber .control-btn.active {
+            color: black;
+            background: #00ff41;
+        }
+    </style>
+</head>
+
+<body class="theme-light">
+
+    <div class="flex justify-between items-start">
+        <div>
+            <h1 class="text-4xl">Icon System</h1>
+            <p class="mb-8 opacity-60 font-bold max-w-md">20 Theme-Adaptive vector icons for fitness protocols.</p>
+        </div>
+        <div class="control-panel">
+            <button class="control-btn active" onclick="setTheme('theme-light', this)">Light</button>
+            <button class="control-btn" onclick="setTheme('theme-dark', this)">Dark</button>
+            <button class="control-btn" onclick="setTheme('theme-glass', this)">Glass</button>
+            <button class="control-btn" onclick="setTheme('theme-cyber', this)">Cyber</button>
+        </div>
+    </div>
+
+    <div class="grid-container">
+        <!-- 1. DUMBBELL -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path
+                        d="M6.5 6.5h11M6.5 17.5h11M6 9h12a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1Z" />
+                    <path
+                        d="M2.5 7.5h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Zm18 0h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Z" />
+                </svg>
+            </div>
+            <div class="label">Dumbbell</div>
+        </div>
+
+        <!-- 2. BARBELL -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M2 12h20M5 8v8M19 8v8M7 9v6M17 9v6" />
+                    <rect x="5" y="8" width="2" height="8" rx="0.5" />
+                    <rect x="17" y="8" width="2" height="8" rx="0.5" />
+                </svg>
+            </div>
+            <div class="label">Barbell</div>
+        </div>
+
+        <!-- 3. SQUAT -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M12 4a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+                    <path d="M4.5 14a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3a4 4 0 0 1-4 4h-7a4 4 0 0 1-4-4v-3Z" />
+                    <path d="M7 12V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v4" />
+                </svg>
+            </div>
+            <div class="label">Squat</div>
+        </div>
+
+        <!-- 4. BENCH PRESS -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M4 17h16M4 17v4M20 17v4M2 12h20M5 7v5M19 7v5" />
+                    <rect x="6" y="14" width="12" height="4" rx="1" />
+                </svg>
+            </div>
+            <div class="label">Bench Press</div>
+        </div>
+
+        <!-- 5. DEADLIFT -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <circle cx="5" cy="17" r="3" />
+                    <circle cx="19" cy="17" r="3" />
+                    <path d="M8 17h8M12 17v-8l-3-4M12 9l3-4" />
+                    <circle cx="12" cy="4" r="1.5" />
+                </svg>
+            </div>
+            <div class="label">Deadlift</div>
+        </div>
+
+        <!-- 6. PULL UP -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M3 5h18M12 5v4M7 9l5 9 5-9M7 9h10" />
+                </svg>
+            </div>
+            <div class="label">Pull Up</div>
+        </div>
+
+        <!-- 7. DIP -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M4 12h5v8M15 12h5v8M9 12v5a3 3 0 0 0 6 0v-5" />
+                    <rect x="4" y="4" width="2" height="6" rx="1" />
+                    <rect x="18" y="4" width="2" height="6" rx="1" />
+                </svg>
+            </div>
+            <div class="label">Dip</div>
+        </div>
+
+        <!-- 8. OVERHEAD PRESS -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M4 12h16M7 12V6M17 12V6M12 12v10M8 22h8" />
+                    <rect x="6" y="3" width="2" height="3" />
+                    <rect x="16" y="3" width="2" height="3" />
+                </svg>
+            </div>
+            <div class="label">Overhead</div>
+        </div>
+
+        <!-- 9. BICEP -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M14 6a2 2 0 0 0-4 0c0 1.5.5 3 2 4 1.5-1 2-2.5 2-4Z" />
+                    <path d="M7 12c-2 0-3 2-3 4s2 6 6 6 6-2 6-5" />
+                    <path d="M16 16c2 0 4-2 4-5.5S17 4 14 4" />
+                </svg>
+            </div>
+            <div class="label">Arm Flex</div>
+        </div>
+
+        <!-- 10. CORE -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <rect x="8" y="4" width="8" height="16" rx="2" />
+                    <path d="M8 9h8M8 14h8M12 4v16" />
+                </svg>
+            </div>
+            <div class="label">Core/Abs</div>
+        </div>
+
+        <!-- 11. LEG PRESS -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M3 18l5-8M21 18l-5-8M8 10h8M6 21h12" />
+                    <rect x="7" y="3" width="10" height="4" rx="1" />
+                </svg>
+            </div>
+            <div class="label">Leg Press</div>
+        </div>
+
+        <!-- 12. KETTLEBELL -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M8 8V6a4 4 0 0 1 8 0v2" />
+                    <rect x="6" y="8" width="12" height="12" rx="6" />
+                </svg>
+            </div>
+            <div class="label">Kettlebell</div>
+        </div>
+
+        <!-- 13. CARDIO -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8Z" />
+                </svg>
+            </div>
+            <div class="label">Cardio</div>
+        </div>
+
+        <!-- 14. STOPWATCH -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <circle cx="12" cy="13" r="8" />
+                    <path d="M12 9v4l2 2M12 2v3M9 3l-2.5 2.5M15 3l2.5 2.5" />
+                </svg>
+            </div>
+            <div class="label">Stopwatch</div>
+        </div>
+
+        <!-- 15. STRETCH/YOGA -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <circle cx="12" cy="5" r="2" />
+                    <path d="M12 20v-5l-4-4 2-5M12 15l4-4-2-5" />
+                    <path d="M7 21h10" />
+                </svg>
+            </div>
+            <div class="label">Mobility</div>
+        </div>
+
+        <!-- 16. WEIGHT PLATE -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+                </svg>
+            </div>
+            <div class="label">Plate</div>
+        </div>
+
+        <!-- 17. CABLE MACHINE -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <circle cx="12" cy="5" r="3" />
+                    <path d="M12 8v12M9 20h6" />
+                    <path d="M9 14h6" />
+                </svg>
+            </div>
+            <div class="label">Cable</div>
+        </div>
+
+        <!-- 18. LUNGS -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path
+                        d="M12 4v16M8 8a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h4V8H8ZM16 8h-4v10h4a3 3 0 0 0 3-3v-4a3 3 0 0 0-3-3Z" />
+                </svg>
+            </div>
+            <div class="label">Breath</div>
+        </div>
+
+        <!-- 19. WATER -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path d="M12 22a7 7 0 0 1-7-7c0-4.5 7-13 7-13s7 8.5 7 13a7 7 0 0 1-7 7Z" />
+                </svg>
+            </div>
+            <div class="label">Hydrate</div>
+        </div>
+
+        <!-- 20. TARGET -->
+        <div class="icon-card">
+            <div class="icon-wrapper">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="12" r="6" />
+                    <circle cx="12" cy="12" r="2" />
+                </svg>
+            </div>
+            <div class="label">Target</div>
+        </div>
+
+    </div>
+
+    <script>
+        function setTheme(themeName, btn) {
+            document.body.className = themeName;
+            document.querySelectorAll('.control-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

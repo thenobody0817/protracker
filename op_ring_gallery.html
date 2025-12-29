@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator Ring Gallery - 20 Styles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #0f172a;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .grid-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .card {
+            background: #1e293b;
+            border-radius: 1rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #334155;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-color: #3b82f6;
+        }
+
+        .label {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+            font-weight: 700;
+        }
+
+        /* Base Ring Setup */
+        .ring-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            items-center;
+            justify-center;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        circle {
+            transition: all 0.5s ease;
+            transform-origin: center;
+        }
+
+        /* Style 1: Standard Neon */
+        .s1 .bg {
+            stroke: #334155;
+        }
+
+        .s1 .prog {
+            stroke: #3b82f6;
+            filter: drop-shadow(0 0 8px #3b82f6);
+            stroke-linecap: round;
+        }
+
+        /* Style 2: Segmented Dash */
+        .s2 .prog {
+            stroke: #10b981;
+            stroke-dasharray: 4 4;
+            stroke-linecap: butt;
+        }
+
+        /* Style 3: Double Rail */
+        .s3 .bg {
+            stroke-width: 1;
+            stroke: #475569;
+        }
+
+        .s3 .prog {
+            stroke-width: 4;
+            stroke: #f43f5e;
+            stroke-linecap: square;
+        }
+
+        /* Style 4: Cyber Glitch */
+        .s4 .bg {
+            stroke: #334155;
+            stroke-dasharray: 10 20;
+        }
+
+        .s4 .prog {
+            stroke: #a855f7;
+            stroke-dasharray: 40 10;
+            stroke-width: 6;
+            filter: drop-shadow(2px 2px 0px rgba(255, 0, 255, 0.5));
+        }
+
+        /* Style 5: Thin Minimal */
+        .s5 .bg {
+            stroke: #334155;
+            stroke-width: 1;
+        }
+
+        .s5 .prog {
+            stroke: #ffffff;
+            stroke-width: 1;
+        }
+
+        /* Style 6: Chunky Industrial */
+        .s6 .bg {
+            stroke: #1e293b;
+            stroke-width: 20;
+        }
+
+        .s6 .prog {
+            stroke: #fbbf24;
+            stroke-width: 20;
+            stroke-dasharray: 2 1;
+        }
+
+        /* Style 7: Radar Sweep */
+        .s7 .bg {
+            stroke: #1e293b;
+        }
+
+        .s7 .prog {
+            stroke: #0ea5e9;
+            stroke-width: 2;
+            fill: rgba(14, 165, 233, 0.1);
+        }
+
+        /* Style 8: Gradient Stroke (Simulated via dash offset opacity/color not really possible easily in raw css w/o defs, using solid for now but dual ring) */
+        .s8 .prog {
+            stroke: url(#grad1);
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+
+        /* Style 9: Dot Matrix */
+        .s9 .bg {
+            stroke: #334155;
+            stroke-dasharray: 1 5;
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+
+        .s9 .prog {
+            stroke: #22d3ee;
+            stroke-dasharray: 0 10;
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+
+        /* Style 10: Pulsing Aura */
+        .s10 .prog {
+            stroke: #f472b6;
+            stroke-width: 4;
+            animation: pulseStroke 2s infinite;
+        }
+
+        @keyframes pulseStroke {
+            0% {
+                stroke-width: 4;
+                opacity: 1;
+            }
+
+            50% {
+                stroke-width: 10;
+                opacity: 0.5;
+            }
+
+            100% {
+                stroke-width: 4;
+                opacity: 1;
+            }
+        }
+
+        /* Style 11: HUD Reticle */
+        .s11 .bg {
+            stroke: #475569;
+            stroke-width: 1;
+            stroke-dasharray: 20 20;
+        }
+
+        .s11 .prog {
+            stroke: #eab308;
+            stroke-width: 2;
+            marker-end: url(#arrow);
+        }
+
+        /* Style 12: Dual Tone Offset */
+        .s12 .prog {
+            stroke: #6366f1;
+            stroke-width: 10;
+            stroke-dasharray: 100 1000;
+        }
+
+        .s12 .prog2 {
+            stroke: #ec4899;
+            stroke-width: 10;
+            stroke-dasharray: 50 1000;
+            stroke-dashoffset: -120;
+        }
+
+        /* Style 13: Square Cap */
+        .s13 .bg {
+            stroke: #334155;
+            stroke-width: 12;
+        }
+
+        .s13 .prog {
+            stroke: #14b8a6;
+            stroke-width: 8;
+            stroke-linecap: square;
+        }
+
+        /* Style 14: Warning Stripe */
+        .s14 .prog {
+            stroke: #f97316;
+            stroke-width: 12;
+            stroke-dasharray: 10 5;
+        }
+
+        /* Style 15: Ghost Track */
+        .s15 .bg {
+            stroke: rgba(255, 255, 255, 0.05);
+            stroke-width: 20;
+        }
+
+        .s15 .prog {
+            stroke: rgba(255, 255, 255, 0.9);
+            stroke-width: 2;
+        }
+
+        /* Style 16: Interlaced */
+        .s16 .prog {
+            stroke: #8b5cf6;
+            stroke-width: 4;
+            stroke-dasharray: 2 4;
+        }
+
+        .s16 .bg {
+            stroke: #4c1d95;
+            stroke-width: 4;
+            stroke-dasharray: 2 4;
+            stroke-dashoffset: 3;
+        }
+
+        /* Style 17: Organic Blobs (Approximation) */
+        .s17 .prog {
+            stroke: #84cc16;
+            stroke-width: 10;
+            stroke-linecap: round;
+            filter: blur(2px) contrast(200%);
+        }
+
+        /* Style 18: Tech Target */
+        .s18 .bg {
+            stroke: #334155;
+            stroke-width: 1;
+        }
+
+        .s18 .prog {
+            stroke: #ef4444;
+            stroke-width: 2;
+        }
+
+        .s18-dec {
+            position: absolute;
+            border: 1px solid #ef4444;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        /* Style 19: Dashed Offset */
+        .s19 .bg {
+            stroke: #334155;
+            stroke-dasharray: 2 2;
+            stroke-width: 2;
+        }
+
+        .s19 .prog {
+            stroke: #06b6d4;
+            stroke-width: 6;
+            stroke-dasharray: 40 10;
+        }
+
+        /* Style 20: Reactor Core */
+        .s20 .prog {
+            stroke: #ecfeff;
+            stroke-width: 6;
+            filter: drop-shadow(0 0 10px #22d3ee);
+        }
+
+        .s20 .bg {
+            stroke: #164e63;
+            stroke-width: 14;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="p-8 text-center">
+        <h1 class="text-3xl font-black uppercase tracking-widest mb-2">Op-Ring Gallery</h1>
+        <p class="text-slate-400">Select a style ID to implement</p>
+    </div>
+
+    <div class="grid-gallery">
+        <!-- SVG DEFS -->
+        <svg style="width:0;height:0;position:absolute;">
+            <defs>
+                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+        </svg>
+
+        <!-- CARDS -->
+        <!-- 1 -->
+        <div class="card s1">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" stroke-width="4" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-width="4" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">01. Standard Neon</div>
+        </div>
+        <!-- 2 -->
+        <div class="card s2">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" stroke="#334155" stroke-width="6" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-width="6" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">02. Segmented Dash</div>
+        </div>
+        <!-- 3 -->
+        <div class="card s3">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">03. Double Rail</div>
+        </div>
+        <!-- 4 -->
+        <div class="card s4">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" stroke-width="2" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="100" />
+                </svg></div>
+            <div class="label">04. Cyber Glitch</div>
+        </div>
+        <!-- 5 -->
+        <div class="card s5">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">05. Thin Minimal</div>
+        </div>
+        <!-- 6 -->
+        <div class="card s6">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="40" fill="none" />
+                    <circle class="prog" cx="50" cy="50" r="40" fill="none" stroke-dasharray="251"
+                        stroke-dashoffset="60" />
+                </svg></div>
+            <div class="label">06. Chunky Industrial</div>
+        </div>
+        <!-- 7 -->
+        <div class="card s7">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" stroke-width="2" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">07. Radar Sweep</div>
+        </div>
+        <!-- 8 -->
+        <div class="card s8">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" stroke="#334155" stroke-width="8" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">08. Gradient Flow</div>
+        </div>
+        <!-- 9 -->
+        <div class="card s9">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">09. Dot Matrix</div>
+        </div>
+        <!-- 10 -->
+        <div class="card s10">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" stroke="#334155" stroke-width="4" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">10. Pulsing Aura</div>
+        </div>
+        <!-- 11 -->
+        <div class="card s11">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" stroke-linecap="round" />
+                    <circle cx="50" cy="50" r="2" fill="white" />
+                </svg></div>
+            <div class="label">11. HUD Reticle</div>
+        </div>
+        <!-- 12 -->
+        <div class="card s12">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" stroke="#334155" stroke-width="10" />
+                    <!-- Double progress -->
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" />
+                    <circle class="prog2" cx="50" cy="50" r="45" fill="none" />
+                </svg></div>
+            <div class="label">12. Dual Tone Offset</div>
+        </div>
+        <!-- 13 -->
+        <div class="card s13">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">13. Square Cap</div>
+        </div>
+        <!-- 14 -->
+        <div class="card s14">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" stroke="#334155" stroke-width="12" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">14. Warning Stripe</div>
+        </div>
+        <!-- 15 -->
+        <div class="card s15">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">15. Ghost Track</div>
+        </div>
+        <!-- 16 -->
+        <div class="card s16">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">16. Interlaced</div>
+        </div>
+        <!-- 17 -->
+        <div class="card s17">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" stroke="#334155" stroke-width="10" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">17. Organic Glow</div>
+        </div>
+        <!-- 18 -->
+        <div class="card s18">
+            <div class="ring-container">
+                <div class="s18-dec"></div><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg>
+            </div>
+            <div class="label">18. Tech Target</div>
+        </div>
+        <!-- 19 -->
+        <div class="card s19">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">19. Dashed Offset</div>
+        </div>
+        <!-- 20 -->
+        <div class="card s20">
+            <div class="ring-container"><svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45" fill="none" />
+                    <circle class="prog" cx="50" cy="50" r="45" fill="none" stroke-dasharray="283"
+                        stroke-dashoffset="70" />
+                </svg></div>
+            <div class="label">20. Reactor Core</div>
+        </div>
+    </div>
+</body>
+
+</html>

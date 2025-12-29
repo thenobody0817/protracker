@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Tracker: Button Animation Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+        body {
+            background: #f4f7fa;
+            font-family: 'Inter', sans-serif;
+            padding: 40px;
+            color: #1a202c;
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+
+        h2 {
+            font-size: 0.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #718096;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 20px;
+        }
+
+        .btn-wrapper {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e8ecef;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-wrapper:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .label {
+            font-size: 10px;
+            font-weight: 700;
+            margin-top: 10px;
+            color: #718096;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        /* BASE BUTTON */
+        .set-dot {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            border: 2px solid #e2e8f0;
+            background: #f8fafc;
+            color: #94a3b8;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- 1. POP (Elastic Scale) --- */
+        .style-1.checked {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: white;
+            animation: elastic 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes elastic {
+            0% {
+                transform: scale(1);
+            }
+
+            40% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* --- 2. JELLY --- */
+        .style-2.checked {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+            animation: jelly 0.6s;
+        }
+
+        @keyframes jelly {
+            0% {
+                transform: scale(1, 1);
+            }
+
+            30% {
+                transform: scale(1.25, 0.75);
+            }
+
+            40% {
+                transform: scale(0.75, 1.25);
+            }
+
+            50% {
+                transform: scale(1.15, 0.85);
+            }
+
+            65% {
+                transform: scale(0.95, 1.05);
+            }
+
+            75% {
+                transform: scale(1.05, 0.95);
+            }
+
+            100% {
+                transform: scale(1, 1);
+            }
+        }
+
+        /* --- 3. FLIP (3D) --- */
+        .style-3 {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .style-3.checked {
+            background: #8b5cf6;
+            border-color: #8b5cf6;
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .style-3 svg {
+            transform: rotateY(180deg);
+            /* Counter rotate icon */
+        }
+
+        /* --- 4. SHAKE --- */
+        .style-4.checked {
+            background: #f43f5e;
+            border-color: #f43f5e;
+            color: white;
+            animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+
+        /* --- 5. FILL (Circular Expansion) */
+        .style-5 {
+            z-index: 1;
+        }
+
+        .style-5::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #0ea5e9;
+            border-radius: 14px;
+            transform: scale(0);
+            transition: transform 0.4s;
+            z-index: -1;
+        }
+
+        .style-5.checked {
+            color: white;
+            border-color: #0ea5e9;
+        }
+
+        .style-5.checked::after {
+            transform: scale(1);
+        }
+
+        /* --- 6. NEON GLOW (Cyber) --- */
+        .style-6.checked {
+            background: black;
+            color: #00ff41;
+            border-color: #00ff41;
+            box-shadow: 0 0 10px #00ff41, inset 0 0 10px #00ff41;
+            text-shadow: 0 0 5px #00ff41;
+        }
+
+        /* --- 7. BORDER DASH DRAW --- */
+        .style-7 {
+            border: 2px dashed #cbd5e1;
+        }
+
+        .style-7.checked {
+            border-style: solid;
+            background: #f59e0b;
+            border-color: #f59e0b;
+            color: white;
+            animation: spin-border 0.4s ease-out;
+        }
+
+        @keyframes spin-border {
+            0% {
+                transform: rotate(0deg) scale(0.8);
+                border-radius: 50%;
+            }
+
+            100% {
+                transform: rotate(180deg) scale(1);
+                border-radius: 14px;
+            }
+        }
+
+        /* --- 8. HEARTBEAT --- */
+        .style-8.checked {
+            background: #ec4899;
+            border-color: #ec4899;
+            color: white;
+            animation: heartbeat 1.5s ease-in-out infinite both;
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+
+            14% {
+                transform: scale(1.1);
+            }
+
+            28% {
+                transform: scale(1);
+            }
+
+            42% {
+                transform: scale(1.1);
+            }
+
+            70% {
+                transform: scale(1);
+            }
+        }
+
+        /* --- 9. 3D PRESS --- */
+        .style-9 {
+            border-bottom-width: 4px;
+            transition: all 0.1s;
+        }
+
+        .style-9.checked {
+            background: #6366f1;
+            border-color: #4338ca;
+            color: white;
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+        }
+
+        /* --- 10. LIQUID MORPH --- */
+        .style-10.checked {
+            background: #14b8a6;
+            border-color: #14b8a6;
+            color: white;
+            animation: liquid 0.6s ease-in-out;
+        }
+
+        @keyframes liquid {
+            0% {
+                border-radius: 14px;
+            }
+
+            50% {
+                border-radius: 50%;
+                transform: rotate(45deg);
+            }
+
+            100% {
+                border-radius: 14px;
+                transform: rotate(90deg);
+            }
+        }
+
+        /* --- 11. CHECKMARK DRAW (SVG) --- */
+        .style-11.checked {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+
+        .style-11 svg path {
+            stroke-dasharray: 24;
+            stroke-dashoffset: 24;
+            transition: stroke-dashoffset 0.4s 0.2s;
+        }
+
+        .style-11.checked svg path {
+            stroke-dashoffset: 0;
+        }
+
+        /* --- 12. GLASS SHEEN --- */
+        .style-12 {
+            overflow: hidden;
+        }
+
+        .style-12::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+
+        .style-12.checked {
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            border: none;
+            color: white;
+        }
+
+        .style-12.checked::before {
+            left: 150%;
+            transition: 0.5s;
+        }
+
+        /* --- 13. RIPPLE OUT --- */
+        .style-13.checked {
+            background: #a855f7;
+            border-color: #a855f7;
+            color: white;
+            box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7);
+            animation: ripple-out 0.6s linear;
+        }
+
+        @keyframes ripple-out {
+            0% {
+                box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7);
+            }
+
+            100% {
+                box-shadow: 0 0 0 15px rgba(168, 85, 247, 0);
+            }
+        }
+
+        /* --- 14. SLIDE IN --- */
+        .style-14 .icon-box {
+            transform: translateX(-200%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .style-14.checked {
+            background: #059669;
+            border-color: #059669;
+            color: white;
+            overflow: hidden;
+        }
+
+        .style-14.checked .icon-box {
+            transform: translateX(0);
+        }
+
+        /* --- 15. ROTATE IN --- */
+        .style-15.checked {
+            background: #ef4444;
+            border-color: #ef4444;
+            color: white;
+        }
+
+        .style-15 .icon-box {
+            opacity: 0;
+            transform: rotate(-180deg) scale(0.5);
+            transition: 0.4s;
+        }
+
+        .style-15.checked .icon-box {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        /* --- 16. GLITCH (Cyber 2) --- */
+        .style-16.checked {
+            background: #111;
+            color: #0ff;
+            border: 2px solid #0ff;
+            animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+        }
+
+        @keyframes glitch-skew {
+            0% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(-2px, 2px);
+            }
+
+            40% {
+                transform: translate(-2px, -2px);
+            }
+
+            60% {
+                transform: translate(2px, 2px);
+            }
+
+            80% {
+                transform: translate(2px, -2px);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        /* --- 17. FADE SCALE --- */
+        .style-17.checked {
+            background: #334155;
+            border-color: #334155;
+            color: white;
+            transition: background 0.2s, transform 0.2s;
+            transform: scale(0.95);
+        }
+
+        /* --- 18. DOUBLE BORDER --- */
+        .style-18.checked {
+            background: white;
+            color: #2563eb;
+            border: 4px double #2563eb;
+            transform: scale(1.05);
+        }
+
+        /* --- 19. DIAMOND --- */
+        .style-19 {
+            transition: border-radius 0.3s, transform 0.3s;
+        }
+
+        .style-19.checked {
+            background: #7c3aed;
+            border-color: #7c3aed;
+            color: white;
+            border-radius: 4px;
+            transform: rotate(45deg);
+        }
+
+        .style-19.checked svg {
+            transform: rotate(-45deg);
+        }
+
+        /* --- 20. PARTICLE POP (Pseudo) --- */
+        .style-20.checked {
+            background: #fbbf24;
+            border-color: #fbbf24;
+            color: white;
+            animation: particle-pop 0.6s ease-out;
+        }
+
+        @keyframes particle-pop {
+            0% {
+                box-shadow: 0 0 0 0 #fbbf24;
+            }
+
+            50% {
+                box-shadow: -10px -10px 0 -5px #fbbf24, 10px -10px 0 -5px #fbbf24, -10px 10px 0 -5px #fbbf24, 10px 10px 0 -5px #fbbf24;
+            }
+
+            100% {
+                box-shadow: -20px -20px 0 -10px transparent, 20px -20px 0 -10px transparent, -20px 20px 0 -10px transparent, 20px 20px 0 -10px transparent;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 class="text-3xl font-black mb-2">Animation Gallery</h1>
+    <p class="text-slate-500 mb-8">Click any button to toggle the animation state.</p>
+
+    <!-- SCALING & MOTION -->
+    <h2>Scale & Motion</h2>
+    <div class="grid-container">
+        <div class="btn-wrapper" onclick="toggle(1)">
+            <div id="btn-1" class="set-dot style-1">1</div>
+            <div class="label">Pop Elastic</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(2)">
+            <div id="btn-2" class="set-dot style-2">2</div>
+            <div class="label">Jelly</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(3)">
+            <div id="btn-3" class="set-dot style-3">
+                <div class="icon-box">3</div>
+            </div>
+            <div class="label">3D Flip</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(4)">
+            <div id="btn-4" class="set-dot style-4">4</div>
+            <div class="label">Shake</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(9)">
+            <div id="btn-9" class="set-dot style-9">9</div>
+            <div class="label">3D Press</div>
+        </div>
+    </div>
+
+    <!-- GLOW & LIGHT -->
+    <h2>Glow & Light</h2>
+    <div class="grid-container">
+        <div class="btn-wrapper" onclick="toggle(6)">
+            <div id="btn-6" class="set-dot style-6">6</div>
+            <div class="label">Neon Cyber</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(8)">
+            <div id="btn-8" class="set-dot style-8">8</div>
+            <div class="label">Heartbeat</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(12)">
+            <div id="btn-12" class="set-dot style-12">12</div>
+            <div class="label">Glass Sheen</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(13)">
+            <div id="btn-13" class="set-dot style-13">13</div>
+            <div class="label">Ripple Out</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(20)">
+            <div id="btn-20" class="set-dot style-20">20</div>
+            <div class="label">Particle Pop</div>
+        </div>
+    </div>
+
+    <!-- MORPH & BORDERS -->
+    <h2>Morph & Borders</h2>
+    <div class="grid-container">
+        <div class="btn-wrapper" onclick="toggle(5)">
+            <div id="btn-5" class="set-dot style-5">5</div>
+            <div class="label">Fill Scale</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(7)">
+            <div id="btn-7" class="set-dot style-7">7</div>
+            <div class="label">Dash Spin</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(10)">
+            <div id="btn-10" class="set-dot style-10">10</div>
+            <div class="label">Liquid Rot</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(18)">
+            <div id="btn-18" class="set-dot style-18">18</div>
+            <div class="label">Double Border</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(19)">
+            <div id="btn-19" class="set-dot style-19">
+                <div class="icon-box">19</div>
+            </div>
+            <div class="label">Diamond</div>
+        </div>
+    </div>
+
+    <!-- ICON ENTRANCES -->
+    <h2>Icon Entrances</h2>
+    <div class="grid-container">
+        <div class="btn-wrapper" onclick="toggle(11)">
+            <div id="btn-11" class="set-dot style-11">
+                <div class="icon-box">11</div>
+            </div>
+            <div class="label">Draw Check</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(14)">
+            <div id="btn-14" class="set-dot style-14">
+                <div class="icon-box">14</div>
+            </div>
+            <div class="label">Slide In</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(15)">
+            <div id="btn-15" class="set-dot style-15">
+                <div class="icon-box">15</div>
+            </div>
+            <div class="label">Rotate In</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(16)">
+            <div id="btn-16" class="set-dot style-16">16</div>
+            <div class="label">Glitch</div>
+        </div>
+        <div class="btn-wrapper" onclick="toggle(17)">
+            <div id="btn-17" class="set-dot style-17">17</div>
+            <div class="label">Fade Small</div>
+        </div>
+    </div>
+
+    <script>
+        function toggle(id) {
+            const btn = document.getElementById('btn-' + id);
+
+            // Check SVG
+            const checkSVG = `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>`;
+
+            // Special case for complex inner structures
+            if ([3, 11, 14, 15, 19].includes(id)) {
+                if (btn.classList.contains('checked')) {
+                    btn.classList.remove('checked');
+                    const inner = btn.querySelector('.icon-box') || btn;
+                    // Reset to number if needed, but here we just toggle CSS class mainly
+                    // For demo simplicity, we just swap innerHTML if it's the simple case, 
+                    // but for these complex ones we need to keep structure.
+                    // Let's just swap content of the innermost container.
+                    const container = btn.querySelector('.icon-box') || btn;
+                    container.innerHTML = id;
+                } else {
+                    btn.classList.add('checked');
+                    const container = btn.querySelector('.icon-box') || btn;
+                    container.innerHTML = checkSVG;
+                }
+            } else {
+                // Simple toggle
+                if (btn.classList.contains('checked')) {
+                    btn.classList.remove('checked');
+                    btn.innerHTML = id;
+                } else {
+                    btn.classList.add('checked');
+                    btn.innerHTML = checkSVG;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

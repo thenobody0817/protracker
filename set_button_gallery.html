@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Button Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            color: #1e293b;
+            /* DREAM MESH BACKGROUND */
+            background-color: hsla(238, 100%, 95%, 1);
+            background-image:
+                radial-gradient(at 40% 20%, hsla(28, 100%, 74%, 0.4) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, hsla(189, 100%, 56%, 0.4) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(355, 100%, 93%, 0.4) 0px, transparent 50%),
+                radial-gradient(at 80% 50%, hsla(340, 100%, 76%, 0.4) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(22, 100%, 77%, 0.4) 0px, transparent 50%),
+                radial-gradient(at 80% 100%, hsla(242, 100%, 70%, 0.4) 0px, transparent 50%),
+                radial-gradient(at 0% 0%, hsla(343, 100%, 76%, 0.4) 0px, transparent 50%);
+            background-attachment: fixed;
+            background-size: 100% 100%;
+            animation: mesh-shift 20s infinite alternate;
+        }
+
+        @keyframes mesh-shift {
+            0% {
+                filter: blur(0px) hue-rotate(0deg);
+            }
+
+            100% {
+                filter: blur(0px) hue-rotate(30deg);
+            }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-card:hover {
+            background: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .option-card.selected {
+            border: 2px solid #2563eb;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .preview-area {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* --- BUTTON BASE --- */
+        .btn-base {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            border-radius: 14px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        /* --- STYLES --- */
+
+        /* 1: Pure Glass */
+        .style-1 {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            color: #475569;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .style-1.checked {
+            background: rgba(255, 255, 255, 0.9);
+            color: #059669;
+            border: 1px solid #fff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 2: Soft Aurora */
+        .style-2 {
+            background: rgba(255, 255, 255, 0.4);
+            border: none;
+            color: #64748b;
+        }
+
+        .style-2.checked {
+            background: linear-gradient(135deg, #a5b4fc, #34d399);
+            color: white;
+            box-shadow: 0 4px 12px rgba(52, 211, 153, 0.4);
+        }
+
+        /* 3: Neon Rim */
+        .style-3 {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            color: #64748b;
+        }
+
+        .style-3.checked {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1.5px solid #10b981;
+            color: #10b981;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        /* 4: Frosted Bloom */
+        .style-4 {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: #475569;
+            border-radius: 99px;
+            /* Pill */
+        }
+
+        .style-4.checked {
+            background: #fff;
+            color: #2563eb;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+            border-color: #fff;
+        }
+
+        /* 5: Prism Edge */
+        .style-5 {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            color: #334155;
+            box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .style-5.checked {
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            border: none;
+            color: white;
+            box-shadow: 0 8px 20px -4px rgba(236, 72, 153, 0.5);
+        }
+
+        /* 6: Deep Liquid */
+        .style-6 {
+            background: rgba(30, 41, 59, 0.05);
+            border: 1px solid rgba(30, 41, 59, 0.1);
+            color: #475569;
+        }
+
+        .style-6.checked {
+            background: #0f172a;
+            color: white;
+            border: 1px solid #0f172a;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3);
+        }
+
+        /* 7: Soft Cloud */
+        .style-7 {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid white;
+            color: #64748b;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .style-7.checked {
+            background: #fff;
+            color: #2563eb;
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.3);
+        }
+
+        /* 8: Crystal Cut */
+        .style-8 {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
+            border-left: 1px solid rgba(255, 255, 255, 0.8);
+            color: #334155;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .style-8.checked {
+            background: rgba(16, 185, 129, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.9);
+            color: white;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
+        }
+
+        /* 9: Gradient Wash */
+        .style-9 {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: #475569;
+        }
+
+        .style-9.checked {
+            border: none;
+            background: radial-gradient(circle at center, #60a5fa, #2563eb);
+            color: white;
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        }
+
+        /* 10: Outline Minimalist */
+        .style-10 {
+            background: transparent;
+            border: 1.5px solid #94a3b8;
+            color: #64748b;
+            border-radius: 8px;
+        }
+
+        .style-10.checked {
+            background: #0f172a;
+            border-color: #0f172a;
+            color: white;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="text-4xl font-black uppercase tracking-tighter mb-2">Button Lab</h1>
+            <p class="text-sm font-bold opacity-60 uppercase tracking-widest">Select your preferred style</p>
+        </div>
+
+        <div class="grid">
+            <!-- 1 -->
+            <div class="option-card" onclick="select(1)">
+                <div class="text-xs font-black uppercase opacity-50">01. Pure Glass</div>
+                <div class="preview-area">
+                    <div class="btn-base style-1">1</div>
+                    <div class="btn-base style-1 checked">✓</div>
+                </div>
+            </div>
+
+            <!-- 2 -->
+            <div class="option-card" onclick="select(2)">
+                <div class="text-xs font-black uppercase opacity-50">02. Aurora Pill</div>
+                <div class="preview-area">
+                    <div class="btn-base style-2">2</div>
+                    <div class="btn-base style-2 checked">✓</div>
+                </div>
+            </div>
+
+            <!-- 3 -->
+            <div class="option-card" onclick="select(3)">
+                <div class="text-xs font-black uppercase opacity-50">03. Neon Rim</div>
+                <div class="preview-area">
+                    <div class="btn-base style-3">3</div>
+                    <div class="btn-base style-3 checked">✓</div>
+                </div>
+            </div>
+
+            <!-- 4 -->
+            <div class="option-card" onclick="select(4)">
+                <div class="text-xs font-black uppercase opacity-50">04. Frosted Bloom</div>
+                <div class="preview-area">
+                    <div class="btn-base style-4">4</div>
+                    <div class="btn-base style-4 checked">✓</div>
+                </div>
+            </div>
+
+            <!-- 5 -->
+            <div class="option-card" onclick="select(5)">
+                <div class="text-xs font-black uppercase opacity-50">05. Prism Edge</div>
+                <div class="preview-area">
+                    <div class="btn-base style-5">5</div>
+                    <div class="btn-base style-5 checked">✓</div>
+                </div>
+            </div>
+
+            <!-- 6 -->
+            <div class="option-card" onclick="select(6)">
+                <div class="text-xs font-black uppercase opacity-50">06. Deep Liquid</div>
+                <div class="preview-area">
+                    <div class="btn-base style-6">6</div>
+                    <div class="btn-base style-6 checked">✓</div>
+                </div>
+            </div>
+
+            <!-- 7 -->
+            <div class="option-card" onclick="select(7)">
+                <div class="text-xs font-black uppercase opacity-50">07. Soft Cloud</div>
+                <div class="preview-area">
+                    <div class="btn-base style-7">7</div>
+                    <div class="btn-base style-7 checked">✓</div>
+                </div>
+            </div>
+
+            <!-- 8 -->
+            <div class="option-card" onclick="select(8)">
+                <div class="text-xs font-black uppercase opacity-50">08. Crystal Cut</div>
+                <div class="preview-area">
+                    <div class="btn-base style-8">8</div>
+                    <div class="btn-base style-8 checked">✓</div>
+                </div>
+            </div>
+
+            <!-- 9 -->
+            <div class="option-card" onclick="select(9)">
+                <div class="text-xs font-black uppercase opacity-50">09. Gradient Wash</div>
+                <div class="preview-area">
+                    <div class="btn-base style-9">9</div>
+                    <div class="btn-base style-9 checked">✓</div>
+                </div>
+            </div>
+
+            <!-- 10 -->
+            <div class="option-card" onclick="select(10)">
+                <div class="text-xs font-black uppercase opacity-50">10. Minimalist</div>
+                <div class="preview-area">
+                    <div class="btn-base style-10">10</div>
+                    <div class="btn-base style-10 checked">✓</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function select(id) {
+            document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            console.log("Selected Style:", id);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dual Ring Gallery - 20 Styles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #020617;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .grid-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 3rem;
+        }
+
+        .card {
+            background: #0f172a;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #1e293b;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+        }
+
+        .label {
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        .dial-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            display: flex;
+            items-center;
+            justify-center;
+        }
+
+        .svg-layer {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+            overflow: visible;
+        }
+
+        /* Defaults */
+        .ring-bg {
+            fill: none;
+            stroke: #1e293b;
+            stroke-width: 2;
+        }
+
+        .ring-val {
+            fill: none;
+            transition: stroke-dashoffset 1s linear;
+            stroke-linecap: round;
+        }
+
+        /* S1: Refined Neon */
+        .s1 .outer {
+            stroke: #1e293b;
+            stroke-width: 2;
+        }
+
+        .s1 .outer-val {
+            stroke: #3b82f6;
+            stroke-width: 4;
+            filter: drop-shadow(0 0 4px #3b82f6);
+        }
+
+        .s1 .inner {
+            stroke: #1e293b;
+            stroke-width: 2;
+        }
+
+        .s1 .inner-val {
+            stroke: #ec4899;
+            stroke-width: 8;
+            filter: drop-shadow(0 0 8px #ec4899);
+        }
+
+        /* S2: Solar Orbit */
+        .s2 .outer-val {
+            stroke: none;
+            fill: none;
+        }
+
+        /* Use a dot */
+        .s2 .orbit-dot {
+            fill: #60a5fa;
+            r: 4;
+            offset-path: path("M 110 110 m -90 0 a 90 90 0 1 1 180 0 a 90 90 0 1 1 -180 0");
+            animation: orbit 4s linear infinite;
+        }
+
+        .s2 .inner-val {
+            stroke: url(#gradS2);
+            stroke-width: 12;
+        }
+
+        @keyframes orbit {
+            from {
+                offset-distance: 0%;
+            }
+
+            to {
+                offset-distance: 100%;
+            }
+        }
+
+        /* S3: Mechanical Gear */
+        .s3 .outer-val {
+            stroke: #94a3b8;
+            stroke-width: 14;
+            stroke-dasharray: 4 4;
+            stroke-linecap: butt;
+        }
+
+        .s3 .inner-val {
+            stroke: #eab308;
+            stroke-width: 14;
+            stroke-dasharray: 8 2;
+        }
+
+        .s3 .svg-outer {
+            animation: spin 10s linear infinite;
+        }
+
+        .s3 .svg-inner {
+            animation: spinRev 6s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(270deg);
+            }
+        }
+
+        @keyframes spinRev {
+            100% {
+                transform: rotate(-450deg);
+            }
+        }
+
+        /* S4: Cyber Glitch */
+        .s4 .outer-val {
+            stroke: #06b6d4;
+            stroke-width: 2;
+            stroke-dasharray: 20 40;
+            filter: drop-shadow(2px 2px 0px rgba(6, 182, 212, 0.5));
+        }
+
+        .s4 .inner-val {
+            stroke: #d946ef;
+            stroke-width: 6;
+            stroke-dasharray: 60 10;
+            opacity: 0.8;
+        }
+
+        /* S5: Liquid Fill */
+        .s5 .outer-val {
+            stroke: #475569;
+            stroke-width: 1;
+        }
+
+        .s5 .inner-val {
+            stroke: #3b82f6;
+            stroke-width: 20;
+            stroke-opacity: 0.3;
+        }
+
+        /* Complex liquid usually requires mask/clip-path, simulating thick blurry stroke here */
+
+        /* S6: Minimalist Stack */
+        .s6 .outer-val {
+            stroke: #f8fafc;
+            stroke-width: 1;
+        }
+
+        .s6 .inner-val {
+            stroke: #94a3b8;
+            stroke-width: 4;
+        }
+
+        /* S7: Speedometer (Arc) */
+        .s7 svg {
+            transform: rotate(135deg);
+        }
+
+        /* Start at bottom left */
+        .s7 .outer-val {
+            stroke: #22c55e;
+            stroke-width: 6;
+            stroke-dasharray: 200 1000;
+        }
+
+        /* Partial arc */
+        .s7 .inner-val {
+            stroke: #ef4444;
+            stroke-width: 10;
+            stroke-dasharray: 180 1000;
+        }
+
+        /* S8: Hex Tech */
+        .s8 .outer-val {
+            stroke: #8b5cf6;
+            stroke-width: 2;
+            stroke-dasharray: 10 30;
+        }
+
+        .s8 .inner-val {
+            stroke: #a855f7;
+            stroke-width: 4;
+            stroke-linecap: square;
+        }
+
+        /* Using polygon path in HTML */
+
+        /* S9: Bio-Pulse */
+        .s9 .inner-val {
+            stroke: #84cc16;
+            stroke-width: 8;
+            animation: pulseBio 2s ease-in-out infinite;
+        }
+
+        .s9 .outer-val {
+            stroke: #3f6212;
+            stroke-width: 16;
+            stroke-dasharray: 2 4;
+            opacity: 0.5;
+        }
+
+        @keyframes pulseBio {
+
+            0%,
+            100% {
+                stroke-width: 8;
+                opacity: 0.8;
+            }
+
+            50% {
+                stroke-width: 14;
+                opacity: 0.4;
+            }
+        }
+
+        /* S10: Dot Matrix */
+        .s10 .outer-val {
+            stroke: #64748b;
+            stroke-width: 6;
+            stroke-dasharray: 1 8;
+            stroke-linecap: round;
+        }
+
+        .s10 .inner-val {
+            stroke: #f59e0b;
+            stroke-width: 10;
+            stroke-dasharray: 1 12;
+            stroke-linecap: round;
+        }
+
+        /* S11: Sonic Wave */
+        /* Simulated by multiline dash */
+        .s11 .inner-val {
+            stroke: #ec4899;
+            stroke-width: 20;
+            stroke-dasharray: 2 3;
+        }
+
+        .s11 .outer-val {
+            stroke: #be185d;
+            stroke-width: 2;
+        }
+
+        /* S12: Double Helix */
+        .s12 .outer-val {
+            stroke: #14b8a6;
+            stroke-width: 4;
+            stroke-dasharray: 10 10;
+        }
+
+        .s12 .inner-val {
+            stroke: #0d9488;
+            stroke-width: 4;
+            stroke-dasharray: 10 10;
+            stroke-dashoffset: 10;
+        }
+
+        /* S13: Vaporwave */
+        .s13 .outer-val {
+            stroke: url(#gradVapor);
+            stroke-width: 6;
+        }
+
+        .s13 .inner-val {
+            stroke: #f0abfc;
+            stroke-width: 2;
+            stroke-dasharray: 10 0;
+        }
+
+        /* S14: Glassmorphism */
+        .s14 .ring-bg {
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 12;
+        }
+
+        .s14 .inner-val {
+            stroke: rgba(255, 255, 255, 0.8);
+            stroke-width: 8;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+        }
+
+        .s14 .outer-val {
+            stroke: rgba(255, 255, 255, 0.3);
+            stroke-width: 4;
+        }
+
+        /* S15: Arc Reactor */
+        .s15 .inner-val {
+            stroke: #0ea5e9;
+            stroke-width: 12;
+            filter: drop-shadow(0 0 10px #0ea5e9);
+        }
+
+        .s15 .outer-val {
+            stroke: #0284c7;
+            stroke-width: 20;
+            stroke-dasharray: 10 5;
+            mask: url(#maskArc);
+        }
+
+        /* S16: Segmented Progress */
+        .s16 .outer-val {
+            stroke: #f97316;
+            stroke-width: 10;
+            stroke-dasharray: 45 15;
+            stroke-linecap: butt;
+        }
+
+        .s16 .inner-val {
+            stroke: #fb923c;
+            stroke-width: 4;
+        }
+
+        /* S17: Radar Scan */
+        .s17 .inner-val {
+            stroke: url(#gradRadar);
+            stroke-width: 30;
+        }
+
+        .s17 .outer-val {
+            stroke: #047857;
+            stroke-width: 1;
+        }
+
+        /* S18: Chrono-Analog */
+        .s18 .outer-val {
+            stroke: #e2e8f0;
+            stroke-width: 8;
+            stroke-dasharray: 2 10;
+        }
+
+        .s18 .inner-val {
+            stroke: #ef4444;
+            stroke-width: 2;
+            marker-end: url(#arrowRed);
+        }
+
+        /* S19: Interlaced */
+        .s19 .outer-val {
+            stroke: #6366f1;
+            stroke-width: 8;
+            stroke-dasharray: 50 50;
+        }
+
+        .s19 .inner-val {
+            stroke: #818cf8;
+            stroke-width: 8;
+            stroke-dasharray: 50 50;
+            stroke-dashoffset: 25;
+        }
+
+        /* S20: Eclipse */
+        .s20 .outer-val {
+            stroke: #fcd34d;
+            stroke-width: 2;
+            filter: drop-shadow(0 0 10px #fcd34d);
+        }
+
+        .s20 .inner-val {
+            stroke: #000;
+            stroke-width: 40;
+        }
+
+        /* cutout feel? */
+        /* Better implementation: glowing ring behind a dark disc */
+        .s20 .bg-inner {
+            fill: #0f172a;
+            stroke: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="fixed top-0 left-0 w-full p-6 bg-slate-900/80 backdrop-blur border-b border-slate-800 z-50 text-center">
+        <h1 class="text-2xl font-black uppercase tracking-widest text-white">Dual Ring Gallery</h1>
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-500 mt-2">Outer Ring: Sets // Inner Ring: Timer
+        </p>
+    </div>
+
+    <!-- DEFS -->
+    <svg style="width:0;height:0;position:absolute;">
+        <defs>
+            <linearGradient id="gradS2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#facc15" />
+                <stop offset="100%" style="stop-color:#f97316" />
+            </linearGradient>
+            <linearGradient id="gradVapor" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#22d3ee" />
+                <stop offset="100%" style="stop-color:#f472b6" />
+            </linearGradient>
+            <linearGradient id="gradRadar" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:rgba(16,185,129,0)" />
+                <stop offset="100%" style="stop-color:rgba(16,185,129,0.5)" />
+            </linearGradient>
+            <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                <path d="M0,0 L10,5 L0,10" fill="#ef4444" />
+            </marker>
+        </defs>
+    </svg>
+
+    <div class="grid-gallery mt-20">
+        <!-- 1 -->
+        <div class="card s1">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-bg outer" cx="110" cy="110" r="100" />
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="150" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.8)">
+                    <circle class="ring-bg inner" cx="110" cy="110" r="100" />
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="300" />
+                </svg></div>
+            <div class="label">01. Refined Neon</div>
+        </div>
+
+        <!-- 2 -->
+        <div class="card s2">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-bg outer" cx="110" cy="110" r="90" stroke-dasharray="2 10" />
+                    <circle class="orbit-dot" cx="0" cy="0" r="4" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.6)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="200" />
+                </svg></div>
+            <div class="label">02. Solar Orbit</div>
+        </div>
+
+        <!-- 3 -->
+        <div class="card s3">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="95" stroke-dasharray="596"
+                        stroke-dashoffset="0" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="75" stroke-dasharray="471"
+                        stroke-dashoffset="0" />
+                </svg></div>
+            <div class="label">03. Mechanical</div>
+        </div>
+
+        <!-- 4 -->
+        <div class="card s4">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="100" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.7)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="200" />
+                </svg></div>
+            <div class="label">04. Cyber Glitch</div>
+        </div>
+
+        <!-- 5 -->
+        <div class="card s5">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="100" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.8)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="200" />
+                </svg></div>
+            <div class="label">05. Liquid Fill</div>
+        </div>
+
+        <!-- 6 -->
+        <div class="card s6">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="150" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.9)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="300" />
+                </svg></div>
+            <div class="label">06. Minimalist</div>
+        </div>
+
+        <!-- 7 -->
+        <div class="card s7">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="90" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="70" />
+                </svg></div>
+            <div class="label">07. Speedometer</div>
+        </div>
+
+        <!-- 8 -->
+        <div class="card s8">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <path class="ring-bg outer" d="M110,10 L196,60 L196,160 L110,210 L24,160 L24,60 Z" fill="none" />
+                    <path class="ring-val outer-val" d="M110,10 L196,60 L196,160 L110,210 L24,160 L24,60 Z" fill="none"
+                        stroke-dasharray="600" stroke-dashoffset="150" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220" style="transform: scale(0.7)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="200" />
+                </svg></div>
+            <div class="label">08. Hex Tech</div>
+        </div>
+
+        <!-- 9 -->
+        <div class="card s9">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="90" stroke-dasharray="565"
+                        stroke-dashoffset="0" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.6)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="200" />
+                </svg></div>
+            <div class="label">09. Bio Pulse</div>
+        </div>
+
+        <!-- 10 -->
+        <div class="card s10">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="150" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.75)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="300" />
+                </svg></div>
+            <div class="label">10. Dot Matrix</div>
+        </div>
+
+        <!-- 11 -->
+        <div class="card s11">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="150" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.8)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="300" />
+                </svg></div>
+            <div class="label">11. Sonic Wave</div>
+        </div>
+
+        <!-- 12 -->
+        <div class="card s12">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="90" stroke-dasharray="565"
+                        stroke-dashoffset="150" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.7)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="300" />
+                </svg></div>
+            <div class="label">12. Double Helix</div>
+        </div>
+
+        <!-- 13 -->
+        <div class="card s13">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="150" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.8)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="300" />
+                </svg></div>
+            <div class="label">13. Vaporwave</div>
+        </div>
+
+        <!-- 14 -->
+        <div class="card s14">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-bg outer" cx="110" cy="110" r="100" />
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="150" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.8)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="300" />
+                </svg></div>
+            <div class="label">14. Glassmorphism</div>
+        </div>
+
+        <!-- 15 -->
+        <div class="card s15">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="95" stroke-dasharray="596"
+                        stroke-dashoffset="200" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.6)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="300" />
+                </svg></div>
+            <div class="label">15. Arc Reactor</div>
+        </div>
+
+        <!-- 16 -->
+        <div class="card s16">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="150" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.85)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="300" />
+                </svg></div>
+            <div class="label">16. Segments</div>
+        </div>
+
+        <!-- 17 -->
+        <div class="card s17">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="150" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.7)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="300" />
+                </svg></div>
+            <div class="label">17. Radar Scan</div>
+        </div>
+
+        <!-- 18 -->
+        <div class="card s18">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="150" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.8)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="90" stroke-dasharray="565"
+                        stroke-dashoffset="200" />
+                </svg></div>
+            <div class="label">18. Chrono Analog</div>
+        </div>
+
+        <!-- 19 -->
+        <div class="card s19">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="150" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.8)">
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="300" />
+                </svg></div>
+            <div class="label">19. Interlaced</div>
+        </div>
+
+        <!-- 20 -->
+        <div class="card s20">
+            <div class="dial-container"><svg class="svg-layer svg-outer" viewBox="0 0 220 220">
+                    <circle class="ring-val outer-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="150" />
+                </svg><svg class="svg-layer svg-inner" viewBox="0 0 220 220"
+                    style="transform: rotate(-90deg) scale(0.6)">
+                    <circle class="ring-bg bg-inner" cx="110" cy="110" r="100" />
+                    <circle class="ring-val inner-val" cx="110" cy="110" r="100" stroke-dasharray="628"
+                        stroke-dashoffset="300" />
+                </svg></div>
+            <div class="label">20. Eclipse</div>
+        </div>
+    </div>
+</body>
+
+</html>

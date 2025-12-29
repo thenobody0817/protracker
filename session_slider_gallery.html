@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Slider Gallery - 20 Options</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@700&display=swap');
+
+        :root {
+            --accent: #2563eb;
+            --accent-glow: rgba(37, 99, 235, 0.4);
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 40px 20px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .option-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .option-title {
+            font-weight: 800;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .nav-container {
+            position: relative;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 16px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 10px 0;
+            text-align: center;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #94a3b8;
+        }
+
+        .nav-item.active {
+            color: var(--text);
+        }
+
+        /* --- 1. Sliding Pill --- */
+        .opt-1 .nav-container {
+            background: #f1f5f9;
+        }
+
+        .opt-1 .pill {
+            position: absolute;
+            height: calc(100% - 8px);
+            width: calc(20% - 4.8px);
+            background: white;
+            border-radius: 12px;
+            top: 4px;
+            left: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 1;
+        }
+
+        .opt-1 .nav-item.active {
+            color: var(--accent);
+        }
+
+        /* --- 2. Floating Pill --- */
+        .opt-2 .nav-container {
+            background: transparent;
+            padding: 0;
+        }
+
+        .opt-2 .nav-item {
+            background: #f1f5f9;
+            border-radius: 12px;
+            margin: 0 2px;
+        }
+
+        .opt-2 .nav-item.active {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px var(--accent-glow);
+        }
+
+        /* --- 3. Underline --- */
+        .opt-3 .nav-container {
+            background: transparent;
+            border-bottom: 2px solid #e2e8f0;
+            border-radius: 0;
+        }
+
+        .opt-3 .underline {
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            height: 2px;
+            width: 20%;
+            background: var(--accent);
+            transition: transform 0.3s ease;
+        }
+
+        .opt-3 .nav-item.active {
+            color: var(--accent);
+        }
+
+        /* --- 4. Glowing Neon --- */
+        .opt-4 .nav-container {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+        }
+
+        .opt-4 .nav-item {
+            color: #475569;
+        }
+
+        .opt-4 .nav-item.active {
+            color: #22d3ee;
+            text-shadow: 0 0 8px #22d3ee;
+        }
+
+        .opt-4 .glow {
+            position: absolute;
+            height: 2px;
+            width: 20%;
+            bottom: 0;
+            left: 0;
+            background: #22d3ee;
+            box-shadow: 0 0 15px #22d3ee, 0 0 30px #22d3ee;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* --- 5. Neumorphic --- */
+        .opt-5 .nav-container {
+            background: #e0e0e0;
+            box-shadow: inset 6px 6px 12px #bebebe, inset -6px -6px 12px #ffffff;
+        }
+
+        .opt-5 .nav-item.active {
+            border-radius: 12px;
+            box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+            color: var(--accent);
+        }
+
+        /* --- 6. Glassmorphism --- */
+        .opt-6 .nav-container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .opt-6 .glass-pill {
+            position: absolute;
+            height: calc(100% - 8px);
+            width: calc(20% - 4.8px);
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            top: 4px;
+            left: 4px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: transform 0.4s ease;
+        }
+
+        /* --- 7. Bouncy Marker --- */
+        .opt-7 .marker {
+            position: absolute;
+            top: -10px;
+            left: 10%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            transition: left 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .opt-7 .nav-item.active {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        /* --- 8. Cyber Block --- */
+        .opt-8 .nav-container {
+            background: #000;
+            border: 1px solid #00ff41;
+            overflow: hidden;
+        }
+
+        .opt-8 .nav-item {
+            color: #008f11;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+        }
+
+        .opt-8 .nav-item.active {
+            color: #00ff41;
+            background: rgba(0, 255, 65, 0.1);
+        }
+
+        .opt-8 .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, #00ff4133, transparent);
+            border-left: 2px solid #00ff41;
+            transition: transform 0.2s steps(5);
+        }
+
+        /* --- 9. Slanted --- */
+        .opt-9 .nav-item {
+            transform: skewX(-15deg);
+            margin: 0 5px;
+            background: #e2e8f0;
+            border-radius: 4px;
+        }
+
+        .opt-9 .nav-item span {
+            transform: skewX(15deg);
+            display: inline-block;
+        }
+
+        .opt-9 .nav-item.active {
+            background: #1e293b;
+            color: white;
+        }
+
+        /* --- 10. Minimal Dot --- */
+        .opt-10 .nav-container {
+            background: transparent;
+        }
+
+        .opt-10 .dot {
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .opt-10 .nav-item.active {
+            color: var(--accent);
+            font-weight: 900;
+        }
+
+        /* --- 11. Expansion --- */
+        .opt-11 .nav-item {
+            transition: flex 0.4s ease;
+        }
+
+        .opt-11 .nav-item.active {
+            flex: 2;
+            background: var(--accent);
+            color: white;
+            border-radius: 12px;
+        }
+
+        /* --- 12. Liquid Blob (Simplified CSS version) --- */
+        .opt-12 .blob {
+            position: absolute;
+            height: 80%;
+            width: 15%;
+            background: var(--accent);
+            border-radius: 40% 60% 60% 40% / 50%;
+            top: 10%;
+            left: 2.5%;
+            transition: all 0.5s cubic-bezier(0.5, 0, 0.5, 1.5);
+            z-index: 1;
+            opacity: 0.8;
+        }
+
+        .opt-12 .nav-item.active {
+            color: white;
+            scale: 1.2;
+        }
+
+        /* --- 13. Double Line --- */
+        .opt-13 .lines {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 20%;
+            transition: transform 0.3s ease;
+        }
+
+        .opt-13 .lines::before,
+        .opt-13 .lines::after {
+            content: '';
+            position: absolute;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .opt-13 .lines::before {
+            top: 0;
+        }
+
+        .opt-13 .lines::after {
+            bottom: 0;
+        }
+
+        .opt-13 .nav-item.active {
+            color: var(--accent);
+        }
+
+        /* --- 14. 3D Flip --- */
+        .opt-14 .nav-item {
+            perspective: 1000px;
+        }
+
+        .opt-14 .nav-item span {
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .opt-14 .nav-item.active span {
+            transform: rotateX(360deg);
+            color: var(--accent);
+        }
+
+        /* --- 15. Magnetic Pulse --- */
+        .opt-15 .nav-item.active::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* --- 16. Segmented Gloss --- */
+        .opt-16 .nav-container {
+            background: #1a1a1a;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .opt-16 .nav-item {
+            color: #555;
+            border-right: 1px solid #333;
+        }
+
+        .opt-16 .nav-item:last-child {
+            border: none;
+        }
+
+        .opt-16 .nav-item.active {
+            background: linear-gradient(180deg, #444, #222);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- 17. Floating Island --- */
+        .opt-17 .nav-container {
+            background: white;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f1f5f9;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .opt-17 .nav-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .opt-17 .nav-item.active {
+            color: var(--accent);
+            background: #eff6ff;
+            border-radius: 12px;
+        }
+
+        /* --- 18. Split Text --- */
+        .opt-18 .nav-item span {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            height: 20px;
+        }
+
+        .opt-18 .nav-item span::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            color: var(--accent);
+            transition: transform 0.3s;
+        }
+
+        .opt-18 .nav-item.active span::before {
+            transform: translateY(-100%);
+        }
+
+        .opt-18 .nav-item.active span {
+            color: transparent;
+        }
+
+        /* --- 19. Ghost Border --- */
+        .opt-19 .ghost {
+            position: absolute;
+            inset: 4px;
+            width: calc(20% - 8px);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .opt-19 .nav-item.active {
+            color: var(--accent);
+        }
+
+        /* --- 20. Retro Arcade --- */
+        .opt-20 .nav-container {
+            background: #000;
+            border: 4px solid #fff;
+            border-radius: 0;
+        }
+
+        .opt-20 .nav-item {
+            font-family: 'JetBrains Mono', monospace;
+            border-radius: 0;
+            padding: 8px 0;
+        }
+
+        .opt-20 .nav-item.active {
+            background: #fff;
+            color: #000;
+        }
+
+        .opt-20 .nav-item.active::before {
+            content: '>';
+            position: absolute;
+            left: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="text-center mb-16">
+        <h1 class="text-4xl font-black tracking-tighter mb-4">Session Slider Gallery</h1>
+        <p class="text-slate-500 font-medium">Choose from 20 premium redesign options for your session navigation.</p>
+    </div>
+
+    <div class="gallery-grid" id="gallery">
+        <!-- Options will be injected here -->
+    </div>
+
+    <script>
+        const tabs = ['A', 'X', 'B', 'Y', 'C'];
+        const designs = [
+            { id: 1, name: "Sliding Pill", desc: "Clean, modern background pill transition.", html: '<div class="pill"></div>' },
+            { id: 2, name: "Floating Pill", desc: "Individual floating cards with elevation.", html: '' },
+            { id: 3, name: "Underline", desc: "Classic sliding indicator with border-bottom.", html: '<div class="underline"></div>' },
+            { id: 4, name: "Glowing Neon", desc: "High-contrast dark mode with neon glow.", html: '<div class="glow"></div>' },
+            { id: 5, name: "Neumorphic", desc: "Soft-light and shadows for tactile feel.", html: '' },
+            { id: 6, name: "Glassmorphism", desc: "Frosted glass floating indicator.", html: '<div class="glass-pill"></div>' },
+            { id: 7, name: "Bouncy Marker", desc: "Playful dot indicator with elastic feel.", html: '<div class="marker"></div>' },
+            { id: 8, name: "Cyber Block", desc: "Matrix style with scanlines and steps animation.", html: '<div class="scanlines"></div>' },
+            { id: 9, name: "Slanted", desc: "Dynamic angled tabs for aggressive look.", html: '' },
+            { id: 10, name: "Minimal Dot", desc: "Clean typography with a subtle dot indicator.", html: '<div class="dot"></div>' },
+            { id: 11, name: "Expansion", desc: "Active tab expands while others shrink.", html: '' },
+            { id: 12, name: "Liquid Blob", desc: "Organic morphing shape between tabs.", html: '<div class="blob"></div>' },
+            { id: 13, name: "Double Line", desc: "Framed selection with top and bottom lines.", html: '<div class="lines"></div>' },
+            { id: 14, name: "3D Flip", desc: "Tabs perform a 3D rotation on switch.", html: '' },
+            { id: 15, name: "Magnetic Pulse", desc: "Radiating ring animation on active tab.", html: '' },
+            { id: 16, name: "Segmented Gloss", desc: "Industrial metal look with deep shadows.", html: '' },
+            { id: 17, name: "Floating Island", desc: "The entire nav lifts on interaction.", html: '' },
+            { id: 18, name: "Split Text", desc: "Active text slides up to reveal color.", html: '' },
+            { id: 19, name: "Ghost Border", desc: "Outlined frame that follows the selection.", html: '<div class="ghost"></div>' },
+            { id: 20, name: "Retro Arcade", desc: "8-bit blocky aesthetic with cursors.", html: '' }
+        ];
+
+        const gallery = document.getElementById('gallery');
+
+        designs.forEach(design => {
+            const card = document.createElement('div');
+            card.className = `option-card opt-${design.id}`;
+
+            let navItems = tabs.map((t, i) =>
+                `<div class="nav-item ${i === 0 ? 'active' : ''}" onclick="selectTab(this, ${i}, ${design.id})" data-text="${t}"><span>${t}</span></div>`
+            ).join('');
+
+            card.innerHTML = `
+                <div class="option-title">
+                    <span>${design.id}. ${design.name}</span>
+                    <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded">Option ID: ${design.id}</span>
+                </div>
+                <div class="nav-container">
+                    ${design.html}
+                    ${navItems}
+                </div>
+                <p class="mt-4 text-[12px] text-slate-400 font-medium">${design.desc}</p>
+            `;
+            gallery.appendChild(card);
+        });
+
+        function selectTab(el, index, designId) {
+            const container = el.parentElement;
+            const items = container.querySelectorAll('.nav-item');
+            items.forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+
+            // Handle unique animations by type
+            const pill = container.querySelector('.pill');
+            if (pill) pill.style.transform = `translateX(${index * 104}%)`;
+
+            const underline = container.querySelector('.underline');
+            if (underline) underline.style.transform = `translateX(${index * 100}%)`;
+
+            const glow = container.querySelector('.glow');
+            if (glow) glow.style.transform = `translateX(${index * 100}%)`;
+
+            const glassPill = container.querySelector('.glass-pill');
+            if (glassPill) glassPill.style.transform = `translateX(${index * 104}%)`;
+
+            const marker = container.querySelector('.marker');
+            if (marker) marker.style.left = `${(index * 20) + 10}%`;
+
+            const dot = container.querySelector('.dot');
+            if (dot) dot.style.left = `${(index * 20) + 10}%`;
+
+            const blob = container.querySelector('.blob');
+            if (blob) {
+                blob.style.left = `${(index * 20) + 2.5}%`;
+                // Add a little wobble
+                blob.style.transform = `scaleX(1.4) scaleY(0.8)`;
+                setTimeout(() => {
+                    blob.style.transform = `scaleX(1) scaleY(1)`;
+                }, 250);
+            }
+
+            const lines = container.querySelector('.lines');
+            if (lines) lines.style.transform = `translateX(${index * 100}%)`;
+
+            const ghost = container.querySelector('.ghost');
+            if (ghost) ghost.style.transform = `translateX(${index * 100}%)`;
+
+            // For scanline step effect
+            const scan = container.querySelector('.scanline');
+            if (scan) scan.style.transform = `translateX(${index * 100}%)`;
+        }
+    </script>
+</body>
+
+</html>

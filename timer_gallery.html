@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer Ring Gallery (Full)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=JetBrains+Mono:wght@400;700&family=Fira+Code:wght@500&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #sidebar {
+            width: 300px;
+            background: #1e293b;
+            border-right: 1px solid #334155;
+            overflow-y: auto;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+
+        #main-view {
+            flex: 1;
+            position: relative;
+            background: #020617;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .style-item {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .style-item:hover {
+            background: #334155;
+            color: white;
+        }
+
+        .style-item.active {
+            background: #2563eb;
+            color: white;
+            font-weight: 600;
+        }
+
+        #controls-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #1e293b;
+            padding: 20px;
+            border-top: 1px solid #334155;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            z-index: 50;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            accent-color: #2563eb;
+        }
+
+        #stage {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Helpers */
+        .blur-fx {
+            filter: blur(var(--blur-amt));
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="sidebar">
+        <h2 class="text-xl font-bold mb-6 text-white uppercase tracking-wider">Timer Concepts</h2>
+        <div id="style-list"></div>
+    </div>
+
+    <div id="main-view">
+        <div id="stage"></div>
+        <div id="controls-bar">
+            <button id="btn-toggle"
+                class="bg-blue-600 hover:bg-blue-500 rounded-lg px-4 py-2 font-bold uppercase w-24">Play</button>
+            <input type="range" id="scrubber" min="0" max="60" step="0.1" value="60">
+            <span id="time-display" class="font-mono text-xl w-16 text-right">60.0</span>
+        </div>
+    </div>
+
+    <script>
+        const styles = [
+            { id: 1, name: "Fluid Tank", desc: "Liquid level rises inside mask." },
+            { id: 2, name: "Neon Heartbeat", desc: "Glowing pulse path." },
+            { id: 3, name: "Cyber HUD", desc: "Rotations and glitches." },
+            { id: 4, name: "Particles", desc: "Dots orbiting center." },
+            { id: 5, name: "Eclipse", desc: "Shadow over sun." },
+            { id: 6, name: "Mechanical Shutter", desc: "Aperture segments closing." },
+            { id: 7, name: "Digital Tape", desc: "Scrolling numbers vertically." },
+            { id: 8, name: "Soundwave", desc: "Frequency bars reacting." },
+            { id: 9, name: "Snake Game", desc: "Head eating tail." },
+            { id: 10, name: "Gradient Morph", desc: "Color shifting gradients." },
+            { id: 11, name: "Radar Scan", desc: "Sweeping radar line." },
+            { id: 12, name: "Segmented LED", desc: "Circular blocks fading." },
+            { id: 13, name: "Typographic Fill", desc: "Number fills with water." },
+            { id: 14, name: "Orbiter", desc: "Planet and Moon." },
+            { id: 15, name: "Energy Shield", desc: "Hexagonal mesh fading." },
+            { id: 16, name: "Burning Fuse", desc: "Spark on rope." },
+            { id: 17, name: "Focus Blur", desc: "Blurry to sharp." },
+            { id: 18, name: "Dual Helix", desc: "Two paths intertwining." },
+            { id: 19, name: "Minimal Breath", desc: "Expanding/contracting circle." },
+            { id: 20, name: "Golden Spiral", desc: "Collapsing Fibonacci." }
+        ];
+
+        let currentStyle = 1;
+        let isPlaying = false;
+        let currentTime = 60;
+        let maxTime = 60;
+        let animationFrame;
+
+        // Render Sidebar
+        const list = document.getElementById('style-list');
+        list.innerHTML = styles.map(s => `
+            <div class="style-item ${s.id === currentStyle ? 'active' : ''}" onclick="selectStyle(${s.id})">
+                ${s.id}. ${s.name}
+            </div>
+        `).join('');
+
+        function selectStyle(id) {
+            currentStyle = id;
+            document.querySelectorAll('.style-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.style-item')[id - 1].classList.add('active');
+            renderStructure();
+            updateVisuals();
+        }
+
+        const btn = document.getElementById('btn-toggle');
+        const scrub = document.getElementById('scrubber');
+        const display = document.getElementById('time-display');
+
+        btn.onclick = () => { if (isPlaying) pause(); else play(); };
+        scrub.oninput = (e) => {
+            pause();
+            currentTime = parseFloat(e.target.value);
+            updateUI();
+        };
+
+        function play() {
+            isPlaying = true;
+            btn.innerText = "Pause";
+            lastTime = performance.now();
+            loop();
+        }
+
+        function pause() {
+            isPlaying = false;
+            btn.innerText = "Play";
+            cancelAnimationFrame(animationFrame);
+        }
+
+        let lastTime = 0;
+        function loop(now) {
+            if (!isPlaying) return;
+            const dt = (now - lastTime) / 1000;
+            lastTime = now;
+            if (dt && dt < 0.5) {
+                currentTime -= dt;
+                if (currentTime <= 0) currentTime = 60;
+                updateUI();
+            }
+            animationFrame = requestAnimationFrame(loop);
+        }
+
+        function updateUI() {
+            scrub.value = currentTime;
+            display.innerText = Math.ceil(currentTime);
+            updateVisuals();
+        }
+
+        // --- RENDER HTML STRUCTURE ---
+        function renderStructure() {
+            const s = document.getElementById('stage');
+            s.innerHTML = '';
+
+            switch (currentStyle) {
+                case 1: // Fluid
+                    s.innerHTML = `<svg width="300" height="300" viewBox="0 0 300 300"><defs><clipPath id="cp1"><circle cx="150" cy="150" r="130"/></clipPath></defs><circle cx="150" cy="150" r="135" stroke="#334155" stroke-width="4" fill="#0f172a"/><g clip-path="url(#cp1)"><rect id="fluid-level" x="0" y="0" width="300" height="300" fill="#2563eb" opacity="0.8"/><circle cx="100" cy="250" r="5" fill="white" opacity="0.5"><animate attributeName="cy" from="300" to="0" dur="4s" repeatCount="indefinite"/></circle></g><text id="txt" x="150" y="170" text-anchor="middle" fill="white" font-size="60" font-weight="900">60</text></svg>`;
+                    break;
+                case 2: // Neon
+                    s.innerHTML = `<svg width="300" height="300"><g id="heart-grp"><path d="M150 10 A140 140 0 1 1 149.9 10" fill="none" stroke="#be185d" stroke-width="2" opacity="0.3"/><path id="neon-path" d="M150 10 A140 140 0 1 1 149.9 10" fill="none" stroke="#f43f5e" stroke-width="8" stroke-dasharray="880" stroke-linecap="round" style="filter:drop-shadow(0 0 10px #f43f5e)"/></g><text id="txt" x="150" y="165" text-anchor="middle" fill="#f43f5e" font-size="50" font-family="monospace">60</text></svg>`;
+                    break;
+                case 3: // Cyber
+                    s.innerHTML = `<svg width="300" height="300"><circle cx="150" cy="150" r="140" fill="none" stroke="#00ff41" stroke-width="1" stroke-dasharray="10 5" opacity="0.2"/><g id="c-ring1"><circle cx="150" cy="150" r="120" fill="none" stroke="#00ff41" stroke-width="4" stroke-dasharray="20 180 40 50"/></g><g id="c-ring2"><circle cx="150" cy="150" r="100" fill="none" stroke="#00ff41" stroke-width="2" stroke-dasharray="5 5" opacity="0.5"/></g><text id="txt" x="150" y="165" text-anchor="middle" fill="#00ff41" font-size="60" font-family="Orbitron,sans-serif">60</text></svg>`;
+                    break;
+                case 4: // Particles
+                    s.innerHTML = `<div class="relative w-[300px] h-[300px] rounded-full border border-white/10 flex items-center justify-center"><div id="p-grp" class="absolute inset-0"><div class="absolute w-4 h-4 bg-blue-500 rounded-full blur-[2px] shadow-[0_0_15px_blue] left-[142px] top-0"></div><div class="absolute w-2 h-2 bg-purple-500 rounded-full left-[146px] bottom-0"></div></div><div class="text-7xl font-bold font-mono" id="txt">60</div></div>`;
+                    break;
+                case 5: // Eclipse
+                    s.innerHTML = `<svg width="300" height="300"><circle cx="150" cy="150" r="120" fill="#f59e0b" style="filter:drop-shadow(0 0 30px #f59e0b)"/><circle id="moon" cx="270" cy="150" r="121" fill="#020617"/><text id="txt" x="150" y="165" text-anchor="middle" fill="white" font-size="60" font-weight="bold" style="text-shadow:0 0 10px black">60</text></svg>`;
+                    break;
+                case 6: // Shutter
+                    const blades = [0, 60, 120, 180, 240, 300];
+                    s.innerHTML = `<svg width="300" height="300"><defs><clipPath id="cp-shut"><circle cx="150" cy="150" r="140"/></clipPath></defs><g clip-path="url(#cp-shut)">${blades.map(d => `<path class="blade" d="M150 150 L500 150 L500 0 Z" fill="#333" stroke="#555" transform="rotate(${d} 150 150)"/>`).join('')}</g><circle cx="150" cy="150" r="40" fill="none" stroke="#2563eb" stroke-width="2"/><text id="txt" x="150" y="160" text-anchor="middle" fill="white" font-size="30">60</text></svg>`;
+                    break;
+                case 7: // Digital Tape
+                    s.innerHTML = `<div class="w-24 h-64 bg-slate-800 overflow-hidden relative border-y-4 border-blue-500 rounded"><div id="tape" class="flex flex-col items-center absolute top-0 w-full transition-transform duration-100 will-change-transform"></div><div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-transparent to-slate-900 pointer-events-none"></div><div class="absolute top-1/2 left-0 w-full h-[1px] bg-red-500 opacity-50"></div></div>`;
+                    // Populate numbers
+                    let nH = ''; for (let i = 65; i >= -5; i--) nH += `<div class="h-16 flex items-center justify-center text-3xl font-mono text-slate-300">${i}</div>`;
+                    document.getElementById('tape').innerHTML = nH;
+                    break;
+                case 8: // Soundwave
+                    s.innerHTML = `<div class="flex items-end justify-center gap-1 h-32 w-64" id="bars">${Array(20).fill(0).map(() => `<div class="w-2 bg-green-500 rounded-t transition-all duration-75" style="height:10%"></div>`).join('')}</div><div id="txt" class="absolute top-8 text-4xl font-mono text-green-500">60</div>`;
+                    break;
+                case 9: // Snake
+                    s.innerHTML = `<svg width="300" height="300"><rect x="20" y="20" width="260" height="260" rx="20" fill="none" stroke="#333" stroke-width="20"/><path id="snake" d="M150 20 H260 A20 20 0 0 1 280 40 V260 A20 20 0 0 1 260 280 H40 A20 20 0 0 1 20 260 V40 A20 20 0 0 1 40 20 H150" fill="none" stroke="#22c55e" stroke-width="14" stroke-linecap="round" stroke-dasharray="800 800"/><text id="txt" x="150" y="165" text-anchor="middle" fill="white" font-size="60" font-family="monospace">60</text></svg>`;
+                    break;
+                case 10: // Gradient Morph
+                    s.innerHTML = `<svg width="300" height="300"><defs><linearGradient id="gradM" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><circle cx="150" cy="150" r="130" stroke="url(#gradM)" stroke-width="20" fill="none" transform="rotate(-90 150 150)" id="grad-ring" stroke-dasharray="816"/><text id="txt" x="150" y="165" text-anchor="middle" fill="white" font-size="60">60</text></svg>`;
+                    break;
+                case 11: // Radar
+                    s.innerHTML = `<svg width="300" height="300"><circle cx="150" cy="150" r="140" fill="#002200" stroke="#00ff00" stroke-width="2"/><line id="radar-line" x1="150" y1="150" x2="150" y2="10" stroke="#00ff00" stroke-width="2"/><circle cx="150" cy="150" r="100" fill="none" stroke="#005500"/><path d="M150 150 L200 50" stroke="rgba(0,255,0,0.2)" stroke-width="40" visibility="hidden"/><text id="txt" x="150" y="165" text-anchor="middle" fill="#00ff00" font-size="60" font-family="monospace">60</text></svg>`;
+                    break;
+                case 12: // Segmented LED
+                    let segs = ''; for (let i = 0; i < 60; i++) segs += `<rect class="lcd-seg" x="145" y="10" width="10" height="20" transform="rotate(${i * 6} 150 150)" fill="#ef4444" opacity="0.1" rx="2"/>`;
+                    s.innerHTML = `<svg width="300" height="300">${segs}<text id="txt" x="150" y="165" text-anchor="middle" fill="#ef4444" font-size="60" font-family="monospace">60</text></svg>`;
+                    break;
+                case 13: // Typo Fill
+                    s.innerHTML = `<svg width="300" height="300" viewBox="0 0 1 1"><defs><clipPath id="tc"><text x="0.5" y="0.8" text-anchor="middle" font-size="0.8" font-weight="900" font-family="Inter" id="fill-txt">60</text></clipPath></defs><rect x="0" y="0" width="1" height="1" fill="#333"/><g clip-path="url(#tc)"><rect x="0" y="0" width="1" height="1" fill="#444"/><rect id="water-level" x="0" y="1" width="1" height="1" fill="#3b82f6"/></g></svg>`;
+                    break;
+                case 14: // Orbiter
+                    s.innerHTML = `<div class="relative w-[300px] h-[300px] flex items-center justify-center border border-dashed border-gray-700 rounded-full"><div class="w-16 h-16 bg-yellow-500 rounded-full shadow-[0_0_30px_orange]"></div><div id="planet-grp" class="absolute w-full h-full"><div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-4 w-8 h-8 bg-blue-500 rounded-full shadow-lg"></div></div><div class="absolute bottom-10 text-2xl font-mono text-gray-500" id="txt">60</div></div>`;
+                    break;
+                case 15: // Energy Shield
+                    s.innerHTML = `<svg width="300" height="300"><defs><pattern id="hex" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="scale(2)"><path d="M10 0 L20 5 L20 15 L10 20 L0 15 L0 5 Z" fill="none" stroke="#22d3ee" stroke-width="1"/></pattern></defs><path id="shield" d="M150 10 L280 80 L280 220 L150 290 L20 220 L20 80 Z" fill="url(#hex)" stroke="#22d3ee" stroke-width="4" opacity="1"/><text id="txt" x="150" y="165" text-anchor="middle" fill="#22d3ee" font-size="60">60</text></svg>`;
+                    break;
+                case 16: // Fuse
+                    s.innerHTML = `<svg width="300" height="300"><path d="M40 260 Q 150 20 260 260" fill="none" stroke="#4b5563" stroke-width="8" stroke-dasharray="10 4"/><path id="fuse" d="M40 260 Q 150 20 260 260" fill="none" stroke="#f59e0b" stroke-width="8" stroke-dasharray="380" stroke-dashoffset="0"/><circle id="spark" cx="0" cy="0" r="6" fill="#ef4444" style="filter:drop-shadow(0 0 8px orange)"/></svg><div id="txt" class="absolute top-1/2 text-4xl font-bold">60</div>`;
+                    break;
+                case 17: // Focus
+                    s.innerHTML = `<div id="focus-box" class="text-[10rem] font-black text-white" style="filter: blur(0px)">60</div>`;
+                    break;
+                case 18: // Dual Helix
+                    s.innerHTML = `<svg width="300" height="300"><path id="h1" d="M50 0 Q 100 75 50 150 T 50 300" fill="none" stroke="#f472b6" stroke-width="6"/><path id="h2" d="M250 0 Q 200 75 250 150 T 250 300" fill="none" stroke="#60a5fa" stroke-width="6"/><text id="txt" x="150" y="160" text-anchor="middle" fill="white" font-size="60">60</text></svg>`;
+                    break;
+                case 19: // Minimal Breath
+                    s.innerHTML = `<div id="breath-circle" class="w-64 h-64 bg-slate-100 rounded-full flex items-center justify-center text-slate-800 text-6xl font-thin shadow-2xl transition-transform duration-1000 will-change-transform">60</div>`;
+                    break;
+                case 20: // Golden Spiral
+                    s.innerHTML = `<svg width="300" height="300" viewBox="0 0 100 100"><path id="fib" d="M50,50 m-1,0 a1,1 0 1,0 2,0 a2,2 0 1,0 -4,0 a3,3 0 1,0 6,0 a5,5 0 1,0 -10,0 a8,8 0 1,0 16,0 a13,13 0 1,0 -26,0 a21,21 0 1,0 42,0 a34,34 0 1,0 -68,0" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round"/><text id="txt" x="50" y="55" text-anchor="middle" fill="#fbbf24" font-size="10">60</text></svg>`;
+                    break;
+            }
+        }
+
+        function updateVisuals() {
+            const pct = currentTime / maxTime;
+            const invPct = 1 - pct;
+
+            // Text Update
+            const txt = document.getElementById('txt');
+            if (txt) txt.textContent = Math.ceil(currentTime);
+            const univTxt = document.getElementById('universal-text'); // Leftover fallback
+            if (univTxt) univTxt.textContent = Math.ceil(currentTime);
+
+            // Specific Logic
+            switch (currentStyle) {
+                case 1: // Fluid
+                    document.getElementById('fluid-level').setAttribute('y', 300 * invPct);
+                    break;
+                case 2: // Neon
+                    document.getElementById('neon-path').style.strokeDashoffset = 880 * invPct;
+                    document.getElementById('heart-grp').style.transform = `scale(${1 + (currentTime % 1 < 0.2 ? 0.1 : 0)})`;
+                    document.getElementById('heart-grp').style.transformOrigin = "150px 150px";
+                    break;
+                case 3: // Cyber
+                    document.getElementById('c-ring1').setAttribute('transform', `rotate(${currentTime * 20} 150 150)`);
+                    document.getElementById('c-ring2').setAttribute('transform', `rotate(${-currentTime * 40} 150 150)`);
+                    break;
+                case 4: // Particles
+                    document.getElementById('p-grp').style.transform = `rotate(${invPct * 360}deg)`;
+                    break;
+                case 5: // Eclipse
+                    document.getElementById('moon').setAttribute('cx', 270 - (240 * invPct)); // Moves from right to left approx
+                    break;
+                case 6: // Shutter
+                    const blades = document.querySelectorAll('.blade');
+                    blades.forEach((b, i) => b.setAttribute('transform', `rotate(${i * 60 + (invPct * 50)} 150 150)`));
+                    break;
+                case 7: // Tape
+                    // 60s -> index 60, height 64px each. center is at top:0+padding.
+                    // We render 65 down to -5. The current number should be centered.
+                    // If currentTime = 60, top should show 60.
+                    // We built it 65..-5. 60 is near top.
+                    // We need to shift 'tape' translateY.
+                    // Row height = 64px.
+                    // 65 is first. 60 is 6th element. Y = 5 * 64 = 320px.
+                    // Box height 256. Center is 128.
+                    // Visual position of '60' row should be centered @ 128.
+                    // We basically want to scroll to (Max - Current) position.
+                    const rowH = 64;
+                    const maxVal = 65;
+                    const diff = maxVal - currentTime;
+                    const yPos = -(diff * rowH) + (256 / 2) - (rowH / 2);
+                    document.getElementById('tape').style.transform = `translateY(${yPos}px)`;
+                    break;
+                case 8: // Soundwave
+                    // Randomize height based on time seed
+                    const bars = document.getElementById('bars').children;
+                    for (let i = 0; i < bars.length; i++) {
+                        const h = 10 + Math.abs(Math.sin(currentTime * 5 + i)) * 80;
+                        bars[i].style.height = `${h}%`;
+                    }
+                    if (txt) txt.textContent = Math.ceil(currentTime);
+                    break;
+                case 9: // Snake
+                    const len = 800; // circle approx
+                    document.getElementById('snake').style.strokeDashoffset = len * invPct;
+                    break;
+                case 10: // Gradient
+                    document.getElementById('grad-ring').style.strokeDashoffset = 816 * invPct;
+                    document.querySelector('stop:nth-child(1)').setAttribute('stop-color', `hsl(${currentTime * 6}, 80%, 60%)`);
+                    document.querySelector('stop:nth-child(2)').setAttribute('stop-color', `hsl(${currentTime * 6 + 180}, 80%, 60%)`);
+                    break;
+                case 11: // Radar
+                    document.getElementById('radar-line').setAttribute('transform', `rotate(${invPct * 360} 150 150)`);
+                    break;
+                case 12: // LED
+                    const segs = document.querySelectorAll('.lcd-seg');
+                    const activeIdx = Math.floor(60 * pct);
+                    segs.forEach((s, i) => s.setAttribute('opacity', i < activeIdx ? 1 : 0.1));
+                    break;
+                case 13: // Typo
+                    const t = document.getElementById('fill-txt');
+                    if (t) {
+                        t.textContent = Math.ceil(currentTime);
+                        document.getElementById('water-level').setAttribute('y', 1 - pct);
+                    }
+                    break;
+                case 14: // Orbiter
+                    document.getElementById('planet-grp').style.transform = `rotate(${invPct * 360}deg)`;
+                    break;
+                case 15: // Shield
+                    document.getElementById('shield').setAttribute('opacity', 0.2 + (pct * 0.8));
+                    break;
+                case 16: // Fuse
+                    const totalLen = 380;
+                    document.getElementById('fuse').style.strokeDashoffset = totalLen * invPct;
+                    // Move spark along path... simplify: circle orbit approx or pathLength math
+                    // Actually getting point at length is hard in pure JS without getPointAtLength overhead every frame
+                    // Visual hack: rotate a group for the spark if circular, but this is irregular path
+                    // Let's just hide spark for MVP efficiency or approx
+                    break;
+                case 17: // Focus
+                    const b = document.getElementById('focus-box');
+                    b.innerText = Math.ceil(currentTime);
+                    b.style.filter = `blur(${invPct * 20}px)`;
+                    b.style.opacity = 0.2 + (pct * 0.8);
+                    break;
+                case 18: // Helix
+                    document.getElementById('h1').style.strokeDasharray = '500';
+                    document.getElementById('h1').style.strokeDashoffset = currentTime * 10;
+                    document.getElementById('h2').style.strokeDasharray = '500';
+                    document.getElementById('h2').style.strokeDashoffset = -currentTime * 10;
+                    break;
+                case 19: // Breath
+                    // Breathe in out every 5s
+                    const scale = 0.8 + (Math.sin(currentTime) * 0.2);
+                    document.getElementById('breath-circle').style.transform = `scale(${scale})`;
+                    document.getElementById('breath-circle').innerText = Math.ceil(currentTime);
+                    break;
+                case 20: // Golden
+                    const fLen = 300;
+                    document.getElementById('fib').style.strokeDasharray = fLen;
+                    document.getElementById('fib').style.strokeDashoffset = fLen * invPct;
+                    break;
+            }
+        }
+
+        // Initial
+        selectStyle(1);
+
+    </script>
+</body>
+
+</html>

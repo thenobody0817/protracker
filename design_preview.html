@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Bar Concepts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+        :root {
+            --bg-app: #f4f7fa;
+            --bg-card: #ffffff;
+            --accent: #2563eb;
+            --accent-2: #10b981;
+            --border: #e8ecef;
+            --text: #1a202c;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-app);
+            color: var(--text);
+            padding: 40px;
+        }
+
+        .wrapper {
+            max-width: 480px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 0;
+            position: relative;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        /* CONCEPT 1: PHOTON STREAM */
+        .photon-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 65%;
+            background: linear-gradient(90deg, rgba(37, 99, 235, 0.05) 0%, rgba(37, 99, 235, 0.25) 100%);
+            border-right: 2px solid rgba(37, 99, 235, 0.8);
+            box-shadow: 5px 0 20px rgba(37, 99, 235, 0.4);
+            z-index: 0;
+        }
+
+        .photon-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 10px #2563eb, 0 0 20px #2563eb;
+        }
+
+        /* CONCEPT 2: DATA CONSTRUCT */
+        .data-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 65%;
+            background: repeating-linear-gradient(45deg,
+                    rgba(37, 99, 235, 0.1),
+                    rgba(37, 99, 235, 0.1) 4px,
+                    rgba(37, 99, 235, 0.02) 4px,
+                    rgba(37, 99, 235, 0.02) 8px);
+            border-right: 3px solid var(--accent);
+            z-index: 0;
+        }
+
+        .scan-line {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: scan 2s infinite linear;
+        }
+
+        @keyframes scan {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* CONCEPT 3: AURORA FLOW */
+        .aurora-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 65%;
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.15), rgba(16, 185, 129, 0.15));
+            mask-image: linear-gradient(to right, black 80%, transparent 100%);
+            z-index: 0;
+        }
+
+        .aurora-bar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            opacity: 0.5;
+            animation: flow 3s infinite ease-in-out;
+        }
+
+        @keyframes flow {
+            0% {
+                background-position: 0% 50%;
+                opacity: 0.2
+            }
+
+            50% {
+                background-position: 100% 50%;
+                opacity: 0.5
+            }
+
+            100% {
+                background-position: 0% 50%;
+                opacity: 0.2
+            }
+        }
+
+        h2 {
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            font-size: 2.25rem;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        .label {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .concept-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+
+        <div>
+            <div class="concept-title">Concept 1: Photon Stream (Energy)</div>
+            <section class="card">
+                <div class="photon-bar"></div>
+                <div class="card-content">
+                    <div>
+                        <p class="label">Spatial Protocol</p>
+                        <h2>65%</h2>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div>
+            <div class="concept-title">Concept 2: Data Construct (Tactical)</div>
+            <section class="card">
+                <div class="data-bar">
+                    <div class="scan-line"></div>
+                </div>
+                <div class="card-content">
+                    <div>
+                        <p class="label">Spatial Protocol</p>
+                        <h2>65%</h2>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div>
+            <div class="concept-title">Concept 3: Aurora Flow (Fluid)</div>
+            <section class="card">
+                <div class="aurora-bar"></div>
+                <div class="card-content">
+                    <div>
+                        <p class="label">Spatial Protocol</p>
+                        <h2>65%</h2>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </div>
+</body>
+
+</html>

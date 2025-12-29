@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Tracker: Icon Styles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Courier+New&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            padding: 40px;
+            background: #f1f5f9;
+            color: #1e293b;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin-bottom: 3rem;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            font-size: 3rem;
+        }
+
+        .style-row {
+            margin-bottom: 4rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .row-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .style-name {
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+        }
+
+        .style-desc {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #94a3b8;
+            letter-spacing: 0.1em;
+        }
+
+        .icons-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: start;
+            flex-wrap: wrap;
+        }
+
+        .icon-box {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .icon-box:hover {
+            transform: scale(1.1);
+        }
+
+        /* BASE SVG */
+        svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* --- STYLES --- */
+
+        /* 1. STANDARD */
+        .style-1 svg {
+            fill: none;
+            stroke: #1e293b;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* 2. SOLID */
+        .style-2 svg {
+            fill: #1e293b;
+            stroke: none;
+        }
+
+        .style-2 path,
+        .style-2 circle,
+        .style-2 rect {
+            stroke-width: 0;
+        }
+
+        /* 3. DUOTONE */
+        .style-3 svg {
+            fill: rgba(59, 130, 246, 0.2);
+            stroke: #3b82f6;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* 4. NEON */
+        .style-row.dark-bg-1 {
+            background: #0f172a;
+        }
+
+        .style-4 svg {
+            fill: none;
+            stroke: #00ff41;
+            stroke-width: 2;
+            filter: drop-shadow(0 0 4px #00ff41);
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* 5. GRADIENT STROKE */
+        .style-5 svg {
+            fill: none;
+            stroke: url(#grad1);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* 6. GLASS */
+        .style-row.glass-bg {
+            background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+        }
+
+        .style-6 .icon-box {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(4px);
+        }
+
+        .style-6 svg {
+            fill: rgba(255, 255, 255, 0.2);
+            stroke: #fff;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transform: scale(0.6);
+        }
+
+        /* 7. BLUEPRINT */
+        .style-row.blueprint-bg {
+            background: #1e3a8a;
+            color: #fff;
+        }
+
+        .style-7 svg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.9);
+            stroke-width: 1;
+            stroke-dasharray: 2 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .style-7 .icon-box {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 8px 8px;
+        }
+
+        /* 8. SKETCH */
+        .style-8 svg {
+            fill: none;
+            stroke: #1e293b;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 6 3 2 3;
+        }
+
+        /* 9. STICKER */
+        .style-9 svg {
+            fill: #1e293b;
+            stroke: white;
+            stroke-width: 4;
+            paint-order: stroke;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        /* 10. FLAT */
+        .style-10 svg {
+            fill: #ef4444;
+            stroke: none;
+        }
+
+        .style-10 .icon-box {
+            background: #fee2e2;
+            border-radius: 12px;
+            padding: 10px;
+        }
+
+        /* 11. SOFT (Neu) */
+        .style-11 .icon-box {
+            background: #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 5px 5px 10px #cbd5e1, -5px -5px 10px #ffffff;
+        }
+
+        .style-11 svg {
+            fill: none;
+            stroke: #64748b;
+            stroke-width: 2;
+            transform: scale(0.5);
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* 12. MIDNIGHT */
+        .style-row.dark-bg-2 {
+            background: #000;
+            color: #fff;
+        }
+
+        .style-12 svg {
+            fill: #111;
+            stroke: #333;
+            stroke-width: 1.5;
+            stroke-linecap: square;
+            stroke-linejoin: miter;
+        }
+
+        /* 13. GOLD */
+        .style-row.dark-bg-3 {
+            background: #1c1917;
+        }
+
+        .style-13 svg {
+            fill: url(#gradGold);
+            stroke: none;
+            filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+            transform: scale(0.8);
+        }
+
+        /* 14. SHARP */
+        .style-14 svg {
+            fill: none;
+            stroke: #000;
+            stroke-width: 2;
+            stroke-linecap: square;
+            stroke-linejoin: miter;
+            shape-rendering: crispEdges;
+        }
+
+        /* 15. ROUNDED */
+        .style-15 svg {
+            fill: none;
+            stroke: #8b5cf6;
+            stroke-width: 3.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* 16. NEGATIVE */
+        .style-16 .icon-box {
+            background: #0f172a;
+            border-radius: 50%;
+        }
+
+        .style-16 svg {
+            fill: #fff;
+            stroke: none;
+            transform: scale(0.5);
+        }
+
+        /* 17. OFFSET */
+        .style-17 svg {
+            fill: none;
+            stroke: #ec4899;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .style-17 .icon-box {
+            position: relative;
+        }
+
+        .style-17 .icon-box::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.5 6.5h11M6.5 17.5h11M6 9h12a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1Z' fill='none' stroke='cyan' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            opacity: 0.5;
+            transform: translate(-2px, -2px);
+            pointer-events: none;
+            /* Note: this is pseudo-element complex for generic SVG, doing simple CSS filter drop-shadow offset instead for robustness */
+        }
+
+        .style-17 svg {
+            filter: drop-shadow(-2px -2px 0 rgba(0, 255, 255, 0.5));
+        }
+
+        /* 18. VAPORWAVE */
+        .style-row.vapor-bg {
+            background: #2e0228;
+            color: #fff;
+        }
+
+        .style-18 svg {
+            fill: #ff00ff;
+            stroke: #00ffff;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(2px 2px 0 #000);
+        }
+
+        /* 19. EMBOSS */
+        .style-19 svg {
+            fill: #e2e8f0;
+            filter: drop-shadow(1px 1px 1px white) drop-shadow(-1px -1px 1px rgba(0, 0, 0, 0.2));
+            stroke: none;
+        }
+
+        /* 20. GHOST */
+        .style-20 svg {
+            fill: none;
+            stroke: #1e293b;
+            stroke-width: 1;
+            opacity: 0.3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SVG DEFS -->
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#f472b6;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="gradGold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+        </linearGradient>
+    </svg>
+
+    <h1>Icon Style Gallery</h1>
+
+    <!-- TEMPLATE FOR ICONS -->
+    <script>
+        const styles = [
+            { id: 1, name: "Standard", desc: "Clean Outline" },
+            { id: 2, name: "Solid", desc: "Full Fill" },
+            { id: 3, name: "Duotone", desc: "Opacity Fill" },
+            { id: 4, name: "Neon", desc: "Glow Effect", extraClass: "dark-bg-1" },
+            { id: 5, name: "Gradient", desc: "Color Shift" },
+            { id: 6, name: "Glass", desc: "Blur & Border", extraClass: "glass-bg" },
+            { id: 7, name: "Blueprint", desc: "Technical", extraClass: "blueprint-bg" },
+            { id: 8, name: "Sketch", desc: "Dashed Line" },
+            { id: 9, name: "Sticker", desc: "White Border" },
+            { id: 10, name: "Flat", desc: "Icon Background" },
+            { id: 11, name: "Soft", desc: "Neumorphism" },
+            { id: 12, name: "Midnight", desc: "Dark Mode", extraClass: "dark-bg-2" },
+            { id: 13, name: "Gold", desc: "Metallic", extraClass: "dark-bg-3" },
+            { id: 14, name: "Sharp", desc: "Industrial" },
+            { id: 15, name: "Rounded", desc: "Friendly" },
+            { id: 16, name: "Negative", desc: "Inverted" },
+            { id: 17, name: "Offset", desc: "Glitch" },
+            { id: 18, name: "Vaporwave", desc: "Retro 80s", extraClass: "vapor-bg" },
+            { id: 19, name: "Emboss", desc: "Inner Shadow" },
+            { id: 20, name: "Ghost", desc: "Subtle" }
+        ];
+
+        const icons = {
+            dumbbell: `<svg viewBox="0 0 24 24"><path d="M6.5 6.5h11M6.5 17.5h11M6 9h12a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1Z"/><path d="M2.5 7.5h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Zm18 0h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Z"/></svg>`,
+            barbell: `<svg viewBox="0 0 24 24"><path d="M2 12h20M5 8v8M19 8v8M7 9v6M17 9v6"/><rect x="5" y="8" width="2" height="8" rx="0.5" /><rect x="17" y="8" width="2" height="8" rx="0.5" /></svg>`,
+            timer: `<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M12 2v3M9 3l-2.5 2.5M15 3l2.5 2.5"/></svg>`,
+            heart: `<svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`,
+            target: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`
+        };
+
+        const container = document.body;
+
+        styles.forEach(style => {
+            const section = document.createElement('div');
+            section.className = `style-row style-${style.id} ${style.extraClass || ''}`;
+
+            section.innerHTML = `
+                <div class="row-header">
+                    <span class="style-name">#${style.id} ${style.name}</span>
+                    <span class="style-desc">${style.desc}</span>
+                </div>
+                <div class="icons-container">
+                    <div class="icon-box">${icons.dumbbell}</div>
+                    <div class="icon-box">${icons.barbell}</div>
+                    <div class="icon-box">${icons.timer}</div>
+                    <div class="icon-box">${icons.heart}</div>
+                    <div class="icon-box">${icons.target}</div>
+                </div>
+            `;
+            container.appendChild(section);
+        });
+    </script>
+</body>
+
+</html>

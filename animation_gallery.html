@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glass Theme Animation Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        /* --- UI LAYER --- */
+        #ui-layer {
+            position: relative;
+            z-index: 10;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(24px);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 8px;
+            border-radius: 16px;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.5);
+            color: #475569;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            background: white;
+        }
+
+        .btn.active {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.4);
+        }
+
+        /* --- ANIMATION LAYER --- */
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            transition: opacity 0.5s;
+        }
+
+        /* OPTION 1: SLOW DRIFT */
+        .anim-1 {
+            background:
+                radial-gradient(at 0% 0%, rgba(132, 59, 206, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
+                #f8fafc;
+            background-size: 200% 200%;
+            animation: drift 15s ease infinite alternate;
+        }
+
+        @keyframes drift {
+            0% {
+                background-position: 0% 0%;
+            }
+
+            100% {
+                background-position: 100% 100%;
+            }
+        }
+
+        /* OPTION 2: AURORA BOREALIS */
+        .anim-2 {
+            background: linear-gradient(-45deg, #ee77520f, #e73c7e0f, #23a6d50f, #23d5ab0f);
+            background-size: 400% 400%;
+            animation: aurora 10s ease infinite;
+        }
+
+        @keyframes aurora {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* OPTION 3: DEEP PULSE */
+        .anim-3 {
+            background-color: #f8fafc;
+        }
+
+        .anim-3::before,
+        .anim-3::after {
+            content: '';
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: pulse-blobs 8s infinite alternate;
+        }
+
+        .anim-3::before {
+            background: #3b82f6;
+            width: 60vw;
+            height: 60vw;
+            top: -10%;
+            left: -10%;
+            border-radius: 40%;
+        }
+
+        .anim-3::after {
+            background: #f43f5e;
+            width: 50vw;
+            height: 50vw;
+            bottom: -10%;
+            right: -10%;
+            border-radius: 45%;
+            animation-delay: -4s;
+        }
+
+        @keyframes pulse-blobs {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: scale(1.2) rotate(20deg);
+                opacity: 0.5;
+            }
+        }
+
+        /* OPTION 4: ORB FLOAT */
+        .anim-4 {
+            background: #f8fafc;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.4;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: #818cf8;
+            top: 20%;
+            left: 20%;
+            animation: float 10s infinite ease-in-out;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: #34d399;
+            bottom: 20%;
+            right: 20%;
+            animation: float 12s infinite ease-in-out reverse;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: #f472b6;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: float 8s infinite ease-in-out -2s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(30px, -30px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        /* OPTION 5: MESHY */
+        .anim-5 {
+            background-color: hsla(238, 100%, 95%, 1);
+            background-image:
+                radial-gradient(at 40% 20%, hsla(28, 100%, 74%, 0.4) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, hsla(189, 100%, 56%, 0.4) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(355, 100%, 93%, 0.4) 0px, transparent 50%),
+                radial-gradient(at 80% 50%, hsla(340, 100%, 76%, 0.4) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(22, 100%, 77%, 0.4) 0px, transparent 50%),
+                radial-gradient(at 80% 100%, hsla(242, 100%, 70%, 0.4) 0px, transparent 50%),
+                radial-gradient(at 0% 0%, hsla(343, 100%, 76%, 0.4) 0px, transparent 50%);
+            filter: blur(40px);
+            animation: mesh-shift 20s infinite alternate;
+        }
+
+        @keyframes mesh-shift {
+            0% {
+                filter: blur(40px) hue-rotate(0deg);
+            }
+
+            100% {
+                filter: blur(60px) hue-rotate(30deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="bg-canvas" class="anim-1"></div>
+    <div id="orb-container"></div> <!-- For Option 4 -->
+
+    <div id="ui-layer">
+        <div class="mb-4">
+            <h1 class="text-3xl font-black uppercase tracking-tighter text-slate-800">Gradient Gallery</h1>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">Select to Preview</p>
+        </div>
+
+        <div class="card">
+            <button onclick="setAnim(1)" id="btn-1" class="btn active">1. Gentle Drift</button>
+            <button onclick="setAnim(2)" id="btn-2" class="btn">2. Aurora Shift</button>
+            <button onclick="setAnim(3)" id="btn-3" class="btn">3. Deep Pulse</button>
+            <button onclick="setAnim(4)" id="btn-4" class="btn">4. Floating Orbs</button>
+            <button onclick="setAnim(5)" id="btn-5" class="btn">5. Dream Mesh</button>
+        </div>
+    </div>
+
+    <script>
+        function setAnim(id) {
+            // Reset
+            const canvas = document.getElementById('bg-canvas');
+            const orbs = document.getElementById('orb-container');
+
+            // Clean classes
+            canvas.className = '';
+            orbs.innerHTML = '';
+
+            // Set new
+            canvas.classList.add(`anim-${id}`);
+
+            // Special case for orbs
+            if (id === 4) {
+                orbs.innerHTML = '<div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>';
+            }
+
+            // UI
+            document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${id}`).classList.add('active');
+        }
+    </script>
+</body>
+
+</html>
