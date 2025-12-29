@@ -1104,297 +1104,6 @@
             stroke-width: 8;
             filter: drop-shadow(0 0 8px #ec4899);
         }
-
-        .rng-s2 .rng-outer-val {
-            stroke: none;
-            fill: none;
-        }
-
-        .rng-s2 .orbit-dot {
-            fill: #60a5fa;
-            r: 4;
-            offset-path: path("M 110 110 m -90 0 a 90 90 0 1 1 180 0 a 90 90 0 1 1 -180 0");
-            animation: orbit 4s linear infinite;
-        }
-
-        .rng-s2 .rng-inner-val {
-            stroke: url(#gradS2);
-            stroke-width: 12;
-        }
-
-        @keyframes orbit {
-            from {
-                offset-distance: 0%;
-            }
-
-            to {
-                offset-distance: 100%;
-            }
-        }
-
-        .rng-s3 .rng-outer-val {
-            stroke: #94a3b8;
-            stroke-width: 14;
-            stroke-dasharray: 4 4;
-            stroke-linecap: butt;
-        }
-
-        .rng-s3 .rng-inner-val {
-            stroke: #eab308;
-            stroke-width: 14;
-            stroke-dasharray: 8 2;
-        }
-
-        .rng-s3 .svg-outer {
-            animation: spin 10s linear infinite;
-        }
-
-        .rng-s3 .svg-inner {
-            animation: spinRev 6s linear infinite;
-        }
-
-        @keyframes spin {
-            100% {
-                transform: rotate(270deg);
-            }
-        }
-
-        @keyframes spinRev {
-            100% {
-                transform: rotate(-450deg);
-            }
-        }
-
-        .rng-s4 .rng-outer-val {
-            stroke: #06b6d4;
-            stroke-width: 2;
-            stroke-dasharray: 20 40;
-            filter: drop-shadow(2px 2px 0px rgba(6, 182, 212, 0.5));
-        }
-
-        .rng-s4 .rng-inner-val {
-            stroke: #d946ef;
-            stroke-width: 6;
-            stroke-dasharray: 60 10;
-            opacity: 0.8;
-        }
-
-        .rng-s5 .rng-outer-val {
-            stroke: #475569;
-            stroke-width: 1;
-        }
-
-        .rng-s5 .rng-inner-val {
-            stroke: #3b82f6;
-            stroke-width: 20;
-            stroke-opacity: 0.3;
-        }
-
-        .rng-s6 .rng-outer-val {
-            stroke: #f8fafc;
-            stroke-width: 1;
-        }
-
-        .rng-s6 .rng-inner-val {
-            stroke: #94a3b8;
-            stroke-width: 4;
-        }
-
-        .rng-s7 svg {
-            transform: rotate(135deg);
-        }
-
-        .rng-s7 .rng-outer-val {
-            stroke: #22c55e;
-            stroke-width: 6;
-            stroke-dasharray: 200 1000;
-        }
-
-        .rng-s7 .rng-inner-val {
-            stroke: #ef4444;
-            stroke-width: 10;
-            stroke-dasharray: 180 1000;
-        }
-
-        .rng-s8 .rng-outer-val {
-            stroke: #8b5cf6;
-            stroke-width: 2;
-            stroke-dasharray: 10 30;
-        }
-
-        .rng-s8 .rng-inner-val {
-            stroke: #a855f7;
-            stroke-width: 4;
-            stroke-linecap: square;
-        }
-
-        .rng-s9 .rng-inner-val {
-            stroke: #84cc16;
-            stroke-width: 8;
-            animation: pulseBio 2s ease-in-out infinite;
-        }
-
-        .rng-s9 .rng-outer-val {
-            stroke: #3f6212;
-            stroke-width: 16;
-            stroke-dasharray: 2 4;
-            opacity: 0.5;
-        }
-
-        @keyframes pulseBio {
-
-            0%,
-            100% {
-                stroke-width: 8;
-                opacity: 0.8;
-            }
-
-            50% {
-                stroke-width: 14;
-                opacity: 0.4;
-            }
-        }
-
-        .rng-s10 .rng-outer-val {
-            stroke: #64748b;
-            stroke-width: 6;
-            stroke-dasharray: 1 8;
-            stroke-linecap: round;
-        }
-
-        .rng-s10 .rng-inner-val {
-            stroke: #f59e0b;
-            stroke-width: 10;
-            stroke-dasharray: 1 12;
-            stroke-linecap: round;
-        }
-
-        .rng-s11 .rng-inner-val {
-            stroke: #ec4899;
-            stroke-width: 20;
-            stroke-dasharray: 2 3;
-        }
-
-        .rng-s11 .rng-outer-val {
-            stroke: #be185d;
-            stroke-width: 2;
-        }
-
-        .rng-s12 .rng-outer-val {
-            stroke: #14b8a6;
-            stroke-width: 4;
-            stroke-dasharray: 10 10;
-        }
-
-        .rng-s12 .rng-inner-val {
-            stroke: #0d9488;
-            stroke-width: 4;
-            stroke-dasharray: 10 10;
-            stroke-dashoffset: 10;
-        }
-
-        .rng-s13 .rng-outer-val {
-            stroke: url(#gradVapor);
-            stroke-width: 6;
-        }
-
-        .rng-s13 .rng-inner-val {
-            stroke: #f0abfc;
-            stroke-width: 2;
-            stroke-dasharray: 10 0;
-        }
-
-        .rng-s14 .ring-bg {
-            stroke: rgba(255, 255, 255, 0.1);
-            stroke-width: 12;
-        }
-
-        .rng-s14 .rng-inner-val {
-            stroke: rgba(255, 255, 255, 0.8);
-            stroke-width: 8;
-            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-        }
-
-        .rng-s14 .rng-outer-val {
-            stroke: rgba(255, 255, 255, 0.3);
-            stroke-width: 4;
-        }
-
-        .rng-s15 .rng-inner-val {
-            stroke: #0ea5e9;
-            stroke-width: 12;
-            filter: drop-shadow(0 0 10px #0ea5e9);
-        }
-
-        .rng-s15 .rng-outer-val {
-            stroke: #0284c7;
-            stroke-width: 20;
-            stroke-dasharray: 10 5;
-            mask: url(#maskArc);
-        }
-
-        .rng-s16 .rng-outer-val {
-            stroke: #f97316;
-            stroke-width: 10;
-            stroke-dasharray: 45 15;
-            stroke-linecap: butt;
-        }
-
-        .rng-s16 .rng-inner-val {
-            stroke: #fb923c;
-            stroke-width: 4;
-        }
-
-        .rng-s17 .rng-inner-val {
-            stroke: url(#gradRadar);
-            stroke-width: 30;
-        }
-
-        .rng-s17 .rng-outer-val {
-            stroke: #047857;
-            stroke-width: 1;
-        }
-
-        .rng-s18 .rng-outer-val {
-            stroke: #e2e8f0;
-            stroke-width: 8;
-            stroke-dasharray: 2 10;
-        }
-
-        .rng-s18 .rng-inner-val {
-            stroke: #ef4444;
-            stroke-width: 2;
-            marker-end: url(#arrowRed);
-        }
-
-        .rng-s19 .rng-outer-val {
-            stroke: #6366f1;
-            stroke-width: 8;
-            stroke-dasharray: 50 50;
-        }
-
-        .rng-s19 .rng-inner-val {
-            stroke: #818cf8;
-            stroke-width: 8;
-            stroke-dasharray: 50 50;
-            stroke-dashoffset: 25;
-        }
-
-        .rng-s20 .rng-outer-val {
-            stroke: #fcd34d;
-            stroke-width: 2;
-            filter: drop-shadow(0 0 10px #fcd34d);
-        }
-
-        .rng-s20 .rng-inner-val {
-            stroke: #000;
-            stroke-width: 40;
-        }
-
-        .rng-s20 .bg-inner {
-            fill: #0f172a;
-            stroke: none;
-        }
     </style>
 </head>
 
@@ -1402,25 +1111,7 @@
     <!-- RING GALLERY DEFS -->
     <svg style="width:0;height:0;position:absolute;">
         <defs>
-            <linearGradient id="gradS2" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#facc15" />
-                <stop offset="100%" style="stop-color:#f97316" />
-            </linearGradient>
-            <linearGradient id="gradVapor" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#22d3ee" />
-                <stop offset="100%" style="stop-color:#f472b6" />
-            </linearGradient>
-            <linearGradient id="gradRadar" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" style="stop-color:rgba(16,185,129,0)" />
-                <stop offset="100%" style="stop-color:rgba(16,185,129,0.5)" />
-            </linearGradient>
-            <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
-                <path d="M0,0 L10,5 L0,10" fill="#ef4444" />
-            </marker>
-            <mask id="maskArc">
-                <rect width="100%" height="100%" fill="white" />
-                <path d="M110 5 a 105 105 0 0 1 0 210 a 105 105 0 0 1 0 -210" fill="gray" />
-            </mask>
+
         </defs>
     </svg>
     <canvas id="matrix-bg"></canvas>
@@ -1575,7 +1266,7 @@
         const state = {
             tab: localStorage.getItem('activeTab') || 'A',
             theme: localStorage.getItem('appTheme') || 'glass',
-            ringTheme: localStorage.getItem('ringTheme') || 's1',
+
             activeIdx: localStorage.getItem('activeIdx') ? parseInt(localStorage.getItem('activeIdx')) : 0,
             scrollPos: parseInt(localStorage.getItem('scrollPos')) || 0,
             isInitialLoad: true, timer: null, resting: false, working: false, workCallback: null,
@@ -1588,7 +1279,7 @@
         function saveState() {
             localStorage.setItem('activeTab', state.tab);
             localStorage.setItem('appTheme', state.theme);
-            localStorage.setItem('ringTheme', state.ringTheme);
+
             localStorage.setItem('activeIdx', state.activeIdx);
         }
 
@@ -1922,34 +1613,23 @@
         }
 
         function getRingHTML(s, { done, goal, tmr, tot, wk, rst }) {
+            // Force s1
             const pSet = goal ? Math.min(done / goal, 1) : 0;
             let pTime = 0;
             if (tot > 0) pTime = tmr / tot; else if (wk) pTime = 1;
 
-            const base = "svg-layer rng-" + s;
+            const base = "svg-layer rng-s1";
             const C = 628;
             const offSet = C - (C * pSet);
             const offTime = C - (C * pTime);
+            const scl = 0.8;
 
-            const scales = { s1: 0.8, s2: 0.6, s3: 1, s4: 0.7, s5: 0.8, s6: 0.9, s9: 0.6, s10: 0.75, s11: 0.8, s12: 0.7, s13: 0.8, s14: 0.8, s15: 0.6, s16: 0.85, s17: 0.7, s18: 0.8, s19: 0.8, s20: 0.6 };
-            const scl = scales[s] || 0.8;
-
-            let innerContent = `<circle class="rng-inner" cx="110" cy="110" r="100"/><circle class="rng-inner-val" cx="110" cy="110" r="100" stroke-dasharray="${C}" stroke-dashoffset="${offTime}"/>`;
-            if (s === 's20') innerContent = `<circle class="ring-bg bg-inner" cx="110" cy="110" r="100"/><circle class="rng-inner-val" cx="110" cy="110" r="100" stroke-dasharray="${C}" stroke-dashoffset="${offTime}"/>`;
-            if (s === 's15') innerContent = `<circle class="rng-inner-val" cx="110" cy="110" r="100" stroke-dasharray="${C}" stroke-dashoffset="${offTime}" mask="url(#maskArc)"/>`;
-
-            let outerContent = `<circle class="rng-outer" cx="110" cy="110" r="100"/><circle class="rng-outer-val" cx="110" cy="110" r="100" stroke-dasharray="${C}" stroke-dashoffset="${offSet}"/>`;
-            if (s === 's8') {
-                const hC = 600; const hOff = hC - (hC * pSet);
-                outerContent = `<path class="ring-bg outer" d="M110,10 L196,60 L196,160 L110,210 L24,160 L24,60 Z"/><path class="ring-val outer-val" d="M110,10 L196,60 L196,160 L110,210 L24,160 L24,60 Z" stroke-dasharray="${hC}" stroke-dashoffset="${hOff}"/>`;
-            }
-            if (s === 's2') {
-                outerContent = `<circle class="ring-bg outer" cx="110" cy="110" r="90" stroke-dasharray="2 10"/><circle class="orbit-dot" cx="0" cy="0" r="4" style="offset-path: path('M 110 110 m -90 0 a 90 90 0 1 1 180 0 a 90 90 0 1 1 -180 0'); offset-distance: ${pSet * 100}%"/>`;
-            }
+            const innerContent = `<circle class="rng-inner" cx="110" cy="110" r="100"/><circle class="rng-inner-val" cx="110" cy="110" r="100" stroke-dasharray="${C}" stroke-dashoffset="${offTime}"/>`;
+            const outerContent = `<circle class="rng-outer" cx="110" cy="110" r="100"/><circle class="rng-outer-val" cx="110" cy="110" r="100" stroke-dasharray="${C}" stroke-dashoffset="${offSet}"/>`;
 
             return `
              <div class="op-dial-container text-white">
-                 <svg class="${base} svg-outer" viewBox="0 0 220 220" ${s === 's7' ? 'style="transform:rotate(135deg)"' : ''}>${outerContent}</svg>
+                 <svg class="${base} svg-outer" viewBox="0 0 220 220">${outerContent}</svg>
                  <svg class="${base} svg-inner" viewBox="0 0 220 220" style="transform: rotate(-90deg) scale(${scl})">${innerContent}</svg>
                  <div class="op-data-display">
                      <!-- Data injected by parent if needed, or overlayed absolutely -->
@@ -2381,7 +2061,7 @@
             };
 
             // Get Ring HTML and inject data display
-            const ringHTML = getRingHTML(state.ringTheme || 's1', ringParams).replace(
+            const ringHTML = getRingHTML('s1', ringParams).replace(
                 '<!-- Data injected by parent if needed, or overlayed absolutely -->',
                 dataDisplay
             );
@@ -2467,40 +2147,7 @@
                     </div>`;
             },
 
-            showRingSelector: () => {
-                const styles = Array.from({ length: 20 }, (_, i) => `s${i + 1}`);
-                // Preview params
-                const pp = { done: 1, goal: 1, tmr: 45, tot: 60, wk: true, rst: false };
-                const previewHTML = getRingHTML(state.ringTheme || 's1', pp).replace('<!-- Data injected by parent if needed, or overlayed absolutely -->', '');
 
-                $('modal-content').innerHTML = `
-                    <div class="modal-body text-center p-2 h-[85vh] flex flex-col">
-                        <p class="micro mb-2 opacity-40 uppercase font-black leading-none">Focus Ring Style</p>
-                        
-                        <!-- Live Preview -->
-                        <div class="w-full h-64 bg-slate-900 rounded-2xl mb-4 relative overflow-hidden flex items-center justify-center shadow-inner border border-slate-800">
-                             <div style="transform: scale(0.6)">${previewHTML}</div>
-                             <div class="absolute bottom-2 left-0 w-full text-center text-xs font-black text-slate-500 uppercase tracking-widest">${state.ringTheme || 's1'}</div>
-                        </div>
-
-                        <div class="grid grid-cols-4 gap-2 overflow-y-auto flex-1 p-1 content-start">
-                            ${styles.map(s => {
-                    const active = state.ringTheme === s;
-                    return `
-                                <button onclick="window.app.setRingTheme('${s}')" 
-                                    class="aspect-square rounded-xl border flex flex-col items-center justify-center gap-1 active:scale-95 transition-all relative overflow-hidden ${active ? 'border-blue-500 bg-blue-500/10 ring-1 ring-blue-500' : 'border-slate-800 bg-slate-900/50'}">
-                                    <span class="text-[9px] font-black opacity-60 uppercase tracking-tighter text-white">${s.replace('s', '')}</span>
-                                    <div class="w-6 h-6 rounded-full border-2 ${active ? 'border-blue-500' : 'border-slate-700'}"></div>
-                                </button>
-                                `;
-                }).join('')}
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 mt-2 shrink-0">
-                            <button onclick="window.app.showOptionsMenu()" class="w-full py-4 rounded-xl bg-slate-700 text-white font-bold uppercase leading-none shadow-md text-[10px] tracking-widest">Back</button>
-                            <button onclick="window.app.closeModal()" class="w-full py-4 rounded-xl bg-slate-900 text-white font-bold uppercase leading-none shadow-md text-[10px] tracking-widest">Close</button>
-                        </div>
-                    </div>`;
-            },
 
             showDataManager: () => {
                 $('modal-content').innerHTML = `
@@ -2748,7 +2395,7 @@ Result: any future program, regardless of how different, will snap into your ori
                 }
             },
             setTheme: (t) => { state.theme = t; saveState(); render(false); window.app.showThemeSelector(); },
-            setRingTheme: (t) => { state.ringTheme = t; saveState(); window.app.showRingSelector(); },
+
             testNotification: () => {
                 if (!window.Notification) return alert('Notifications not supported');
                 Notification.requestPermission().then(p => {
@@ -2811,13 +2458,7 @@ Result: any future program, regardless of how different, will snap into your ori
                                     <p class="text-[10px] font-medium opacity-60">Customize app appearance</p>
                                 </div>
                             </button>
-                            <button onclick="window.app.showRingSelector()" class="w-full h-16 rounded-2xl border-2 border-base bg-card flex items-center px-6 gap-4 shadow-sm active:scale-95 transition-transform">
-                                <div class="w-10 h-10 rounded-xl bg-soft flex items-center justify-center text-xl">⭕</div>
-                                <div class="text-left">
-                                    <p class="text-xs font-black uppercase tracking-wider">Focus Ring</p>
-                                    <p class="text-[10px] font-medium opacity-60">Timer style & animation</p>
-                                </div>
-                            </button>
+
                             <button onclick="window.app.testNotification()" class="w-full h-16 rounded-2xl border-2 border-base bg-card flex items-center px-6 gap-4 shadow-sm active:scale-95 transition-transform">
                                 <div class="w-10 h-10 rounded-xl bg-soft flex items-center justify-center text-xl">🔔</div>
                                 <div class="text-left">
