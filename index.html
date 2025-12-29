@@ -2439,7 +2439,9 @@ Result: any future program, regardless of how different, will snap into your ori
                             body: 'Service Worker Success! Tap to dismiss.',
                             requireInteraction: true,
                             vibrate: [200, 100, 200]
-                        }).catch(e => alert('Notify Failed: ' + e));
+                        })
+                            .then(() => alert('System: Notification sent to OS.\n\nIf not visible, check Android Settings -> Notifications for this browser app.'))
+                            .catch(e => alert('Notify Failed: ' + e));
                     }).catch(e => alert('Error waiting for SW ready: ' + e));
                 }
             },
