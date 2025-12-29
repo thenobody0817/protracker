@@ -2409,40 +2409,36 @@ Result: any future program, regardless of how different, will snap into your ori
             testNotification: () => {
                 // 1. Check Support
                 if (!window.Notification) return alert('Error: Notifications not supported.');
-                if (!('serviceWorker' in navigator)) return alert('Error: Service Workers not supported (HTTPS required?).');
+                if (!('serviceWorker' in navigator)) return alert('Error: Service Workers not supported.');
 
                 // 2. Request Permission
                 Notification.requestPermission().then(p => {
-                    if (p !== 'granted') {
-                        return alert('Permission Denied/Dismissed: ' + p);
-                    }
+                    if (p !== 'granted') return alert('Permission Denied: ' + p);
 
-                    // 3. Try SW Notification
+                    // 3. Try Get or Register
                     navigator.serviceWorker.getRegistration().then(reg => {
-                        if (!reg) {
-                            alert('Diagnostics: Permission Granted, but no SW Registration found. Reload page?');
-                            // Fallback
-                            new Notification('Pro Track', { body: 'Fallback Notification (No SW)' });
-                            return;
+                        if (reg) {
+                            attemptNotify(reg);
+                        } else {
+                            // Lazy Register
+                            alert('No SW found. Attempting registration...');
+                            navigator.serviceWorker.register('./sw.js')
+                                .then(newReg => {
+                                    alert('Registration Successful! Sending...');
+                                    attemptNotify(newReg);
+                                })
+                                .catch(err => alert('Registration Failed: ' + err));
                         }
-
-                        // Try sending
-                        reg.showNotification('Pro Track', {
-                            body: 'Service Worker Test Success! Tap to dismiss.',
-                            requireInteraction: true,
-                            vibrate: [200, 100, 200]
-                        }).then(() => {
-                            // Success silently
-                        }).catch(e => {
-                            alert('SW Notification Failed: ' + e.message);
-                            // Fallback
-                            new Notification('Pro Track', { body: 'Fallback (SW Error)' });
-                        });
-
-                    }).catch(err => {
-                        alert('Error getting SW Reg: ' + err);
                     });
                 });
+
+                function attemptNotify(reg) {
+                    reg.showNotification('Pro Track', {
+                        body: 'Service Worker Success! Tap to dismiss.',
+                        requireInteraction: true,
+                        vibrate: [200, 100, 200]
+                    }).catch(e => alert('Notify Failed: ' + e));
+                }
             },
             resetFull: () => { if (confirm('Wipe current progress?')) { localStorage.clear(); state.activeIdx = 0; render(true); } },
             startSet,
@@ -2532,7 +2528,10 @@ Result: any future program, regardless of how different, will snap into your ori
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('./sw.js')
                     .then(reg => console.log('SW Registered', reg))
-                    .catch(err => console.log('SW Fail', err));
+                    .catch(err => {
+                        console.log('SW Fail', err);
+                        alert('Warning: Service Worker failed to register on load. ' + err);
+                    });
             }
         };
     </script>
