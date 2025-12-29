@@ -2397,10 +2397,16 @@ Result: any future program, regardless of how different, will snap into your ori
             setTheme: (t) => { state.theme = t; saveState(); render(false); window.app.showThemeSelector(); },
 
             testNotification: () => {
-                if (!window.Notification) return alert('Notifications not supported');
+                if (!window.Notification) return alert('Notifications not supported on this device.');
                 Notification.requestPermission().then(p => {
-                    if (p === 'granted') new Notification('Pro Track', { body: 'Test Notification Success!' });
-                    else alert('Permission Denied: ' + p);
+                    if (p === 'granted') {
+                        new Notification('Pro Track', {
+                            body: 'Notification System Active. Tap to dismiss.',
+                            requireInteraction: true
+                        });
+                    } else {
+                        alert('Permission Denied: ' + p + '. Please enable notifications in your browser settings.');
+                    }
                 });
             },
             resetFull: () => { if (confirm('Wipe current progress?')) { localStorage.clear(); state.activeIdx = 0; render(true); } },
