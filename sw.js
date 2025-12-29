@@ -7,13 +7,15 @@ const ASSETS = [
 ];
 
 // 1. Install Service Worker & Cache Static Assets
+// 1. Install Service Worker & Cache Static Assets
 self.addEventListener('install', (e) => {
+    self.skipWaiting(); // Force activation immediately
     e.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(ASSETS);
+            // Attempt cache but don't fail installation if it errors
+            return cache.addAll(ASSETS).catch(err => console.warn('SW Cache Error:', err));
         })
     );
-    self.skipWaiting();
 });
 
 // 2. Activate Service Worker & Clean Old Caches
