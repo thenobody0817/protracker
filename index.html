@@ -2407,26 +2407,41 @@ Result: any future program, regardless of how different, will snap into your ori
             setTheme: (t) => { state.theme = t; saveState(); render(false); window.app.showThemeSelector(); },
 
             testNotification: () => {
-                if (!window.Notification) return alert('Notifications not supported on this device.');
+                // 1. Check Support
+                if (!window.Notification) return alert('Error: Notifications not supported.');
+                if (!('serviceWorker' in navigator)) return alert('Error: Service Workers not supported (HTTPS required?).');
+
+                // 2. Request Permission
                 Notification.requestPermission().then(p => {
-                    if (p === 'granted') {
-                        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-                            navigator.serviceWorker.ready.then(registration => {
-                                registration.showNotification('Pro Track', {
-                                    body: 'Service Worker Notification Active. Tap to dismiss.',
-                                    requireInteraction: true,
-                                    vibrate: [200, 100, 200]
-                                });
-                            });
-                        } else {
-                            new Notification('Pro Track', {
-                                body: 'Standard Notification Active. Tap to dismiss.',
-                                requireInteraction: true
-                            });
-                        }
-                    } else {
-                        alert('Permission Denied: ' + p + '. Please enable notifications in your browser settings.');
+                    if (p !== 'granted') {
+                        return alert('Permission Denied/Dismissed: ' + p);
                     }
+
+                    // 3. Try SW Notification
+                    navigator.serviceWorker.getRegistration().then(reg => {
+                        if (!reg) {
+                            alert('Diagnostics: Permission Granted, but no SW Registration found. Reload page?');
+                            // Fallback
+                            new Notification('Pro Track', { body: 'Fallback Notification (No SW)' });
+                            return;
+                        }
+
+                        // Try sending
+                        reg.showNotification('Pro Track', {
+                            body: 'Service Worker Test Success! Tap to dismiss.',
+                            requireInteraction: true,
+                            vibrate: [200, 100, 200]
+                        }).then(() => {
+                            // Success silently
+                        }).catch(e => {
+                            alert('SW Notification Failed: ' + e.message);
+                            // Fallback
+                            new Notification('Pro Track', { body: 'Fallback (SW Error)' });
+                        });
+
+                    }).catch(err => {
+                        alert('Error getting SW Reg: ' + err);
+                    });
                 });
             },
             resetFull: () => { if (confirm('Wipe current progress?')) { localStorage.clear(); state.activeIdx = 0; render(true); } },
