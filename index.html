@@ -2418,26 +2418,29 @@ Result: any future program, regardless of how different, will snap into your ori
                     // 3. Try Get or Register
                     navigator.serviceWorker.getRegistration().then(reg => {
                         if (reg) {
-                            attemptNotify(reg);
+                            attemptNotify();
                         } else {
                             // Lazy Register
                             alert('No SW found. Attempting registration...');
                             navigator.serviceWorker.register('./sw.js')
                                 .then(newReg => {
                                     alert('Registration Successful! Sending...');
-                                    attemptNotify(newReg);
+                                    attemptNotify();
                                 })
                                 .catch(err => alert('Registration Failed: ' + err));
                         }
                     });
                 });
 
-                function attemptNotify(reg) {
-                    reg.showNotification('Pro Track', {
-                        body: 'Service Worker Success! Tap to dismiss.',
-                        requireInteraction: true,
-                        vibrate: [200, 100, 200]
-                    }).catch(e => alert('Notify Failed: ' + e));
+                function attemptNotify() {
+                    // Wait for Service Worker to be fully active/ready
+                    navigator.serviceWorker.ready.then(reg => {
+                        reg.showNotification('Pro Track', {
+                            body: 'Service Worker Success! Tap to dismiss.',
+                            requireInteraction: true,
+                            vibrate: [200, 100, 200]
+                        }).catch(e => alert('Notify Failed: ' + e));
+                    }).catch(e => alert('Error waiting for SW ready: ' + e));
                 }
             },
             resetFull: () => { if (confirm('Wipe current progress?')) { localStorage.clear(); state.activeIdx = 0; render(true); } },
